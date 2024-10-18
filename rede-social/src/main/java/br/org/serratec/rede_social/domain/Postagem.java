@@ -45,11 +45,19 @@ public class Postagem {
 
 	public Postagem() { }
 	
-	public Postagem(Long id, String conteudo, Usuario autor) {
+	public Postagem(Long id, String conteudo, Usuario autor, LocalDateTime dataHoraCriacao) {
 		this.id = id;
 		this.conteudo = conteudo;
 		this.dataHoraCriacao = dataHoraCriacao;
 		this.autor = autor;
+	}
+
+	public List<Comentario> getComentarios() {
+		return comentarios;
+	}
+
+	public void setComentarios(List<Comentario> comentarios) {
+		this.comentarios = comentarios;
 	}
 
 	public Long getId() {
