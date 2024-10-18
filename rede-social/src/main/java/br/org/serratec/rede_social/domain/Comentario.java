@@ -34,6 +34,14 @@ public class Comentario {
 	@JoinColumn(name = "id_postagem")
 	private Postagem postagem;
 	
+	public Postagem getPostagem() {
+		return postagem;
+	}
+
+	public void setPostagem(Postagem postagem) {
+		this.postagem = postagem;
+	}
+
 	public Long getId() {
 		return id;
 	}

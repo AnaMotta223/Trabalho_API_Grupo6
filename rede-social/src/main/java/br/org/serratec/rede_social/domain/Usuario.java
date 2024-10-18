@@ -53,14 +53,11 @@ public class Usuario {
 	@Column(name = "data_nascimento", nullable = false)
 	private LocalDate dataNascimento;
 	
-	//mappedby
-	//@OneToMany
+	@OneToMany(mappedBy = "id.seguidor")
+	private Set<Relacionamento> seguidores = new HashSet<>();
 	
-	@ManyToMany
-	@JoinTable(name = "relacionamento_usuario", joinColumns 
-	= { @JoinColumn(name = "id_usuario")}, inverseJoinColumns = 
-	{@JoinColumn(name = "id_seguidor"), @JoinColumn(name = "id_seguindo")})
-	private Set<Relacionamento> relacionamentos = new HashSet<>();
+	@OneToMany(mappedBy = "id.seguindo")
+	private Set<Relacionamento> seguindo = new HashSet<>();
 	
 	@OneToMany(mappedBy = "autor", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Postagem> postagens = new HashSet<>();
@@ -76,12 +73,28 @@ public class Usuario {
 		this.dataNascimento = dataNascimento;
 	}
 	
-	public Set<Relacionamento> getRelacionamentos() {
-		return relacionamentos;
+	public Set<Relacionamento> getSeguidores() {
+		return seguidores;
 	}
 
-	public void setRelacionamentos(Set<Relacionamento> relacionamentos) {
-		this.relacionamentos = relacionamentos;
+	public void setSeguidores(Set<Relacionamento> seguidores) {
+		this.seguidores = seguidores;
+	}
+
+	public Set<Relacionamento> getSeguindo() {
+		return seguindo;
+	}
+
+	public void setSeguindo(Set<Relacionamento> seguindo) {
+		this.seguindo = seguindo;
+	}
+
+	public Set<Postagem> getPostagens() {
+		return postagens;
+	}
+
+	public void setPostagens(Set<Postagem> postagens) {
+		this.postagens = postagens;
 	}
 
 	public Long getId() {
