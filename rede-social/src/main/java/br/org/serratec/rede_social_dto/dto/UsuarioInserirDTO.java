@@ -1,17 +1,22 @@
 package br.org.serratec.rede_social_dto.dto;
 
+import java.time.LocalDate;
 import java.util.Set;
 
+import br.org.serratec.rede_social.domain.Postagem;
 import br.org.serratec.rede_social.domain.Usuario;
 
 public class UsuarioInserirDTO {
 	
 	private String nome;
+	private String sobrenome;
 	private String email;
+	private LocalDate dataNascimento;
 	private String senha;
 	private String confirmaSenha;
 	private Set<Usuario> seguidores;
 	private Set<Usuario> seguindo;
+	private Set<Postagem> postagens;
 	
 	public String getNome() {
 		return nome;
@@ -59,7 +64,35 @@ public class UsuarioInserirDTO {
 	public void setConfirmaSenha(String confirmaSenha) {
 		this.confirmaSenha = confirmaSenha;
 	}
-	
-	
 
+
+	public String getSobrenome() {
+		return sobrenome;
+	}
+
+
+	public void setSobrenome(String sobrenome) {
+		this.sobrenome = sobrenome;
+	}
+
+
+	public LocalDate getDataNascimento() {
+		return dataNascimento;
+	}
+
+
+	public void setDataNascimento(LocalDate dataNascimento) {
+		this.dataNascimento = dataNascimento;
+	}
+
+
+	public Set<Postagem> getPostagens() {
+		return postagens;
+	}
+
+
+	public void setPostagens(Set<Postagem> postagens) {
+		this.postagens = postagens;
+	}
+	
 }

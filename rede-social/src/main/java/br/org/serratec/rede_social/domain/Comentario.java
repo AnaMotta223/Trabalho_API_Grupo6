@@ -26,7 +26,6 @@ public class Comentario {
 	@Column(name = "texto", nullable = false, length = 280)
 	private String texto;
 	
-	//pesquisar se precisa validar o not null mesmo o campo sendo automatico
 	@Column(name = "data_criacao", nullable = false)
 	private LocalDate dataCriacao;
 	
