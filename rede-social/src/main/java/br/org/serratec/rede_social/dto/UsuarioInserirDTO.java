@@ -1,4 +1,4 @@
-package br.org.serratec.rede_social_dto.dto;
+package br.org.serratec.rede_social.dto;
 
 import java.time.LocalDate;
 import java.util.Set;

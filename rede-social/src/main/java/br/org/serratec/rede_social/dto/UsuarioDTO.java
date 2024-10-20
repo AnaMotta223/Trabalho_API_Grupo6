@@ -1,4 +1,4 @@
-package br.org.serratec.rede_social_dto.dto;
+package br.org.serratec.rede_social.dto;
 
 import java.util.HashSet;
 import java.util.Set;

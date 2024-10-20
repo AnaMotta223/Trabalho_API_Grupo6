@@ -8,17 +8,18 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.org.serratec.rede_social.domain.Postagem;
 import br.org.serratec.rede_social.domain.Relacionamento;
 import br.org.serratec.rede_social.domain.Usuario;
+import br.org.serratec.rede_social.dto.UsuarioDTO;
+import br.org.serratec.rede_social.dto.UsuarioInserirDTO;
 import br.org.serratec.rede_social.exception.EmailException;
 import br.org.serratec.rede_social.exception.SenhaException;
 import br.org.serratec.rede_social.repository.PostagemRepository;
 import br.org.serratec.rede_social.repository.UsuarioRepository;
-import br.org.serratec.rede_social_dto.dto.UsuarioDTO;
-import br.org.serratec.rede_social_dto.dto.UsuarioInserirDTO;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -29,6 +30,9 @@ public class UsuarioService {
 	
 	@Autowired
 	PostagemRepository postagemRepository;
+	
+	@Autowired
+	private BCryptPasswordEncoder encoder;
 	
 	public List<UsuarioDTO> findAll(){
 		List<Usuario> usuarios = usuarioRepository.findAll();
@@ -64,7 +68,7 @@ public class UsuarioService {
 		usuario.setEmail(usuarioInserirDTO.getEmail());
 		usuario.setDataNascimento(usuarioInserirDTO.getDataNascimento());
 		//colocar a senha criptografada
-		usuario.setSenha(usuarioInserirDTO.getSenha());
+		usuario.setSenha(encoder.encode(usuarioInserirDTO.getSenha()));
 		
 		Set<Relacionamento> seguidores = new HashSet<>();
 		Set<Relacionamento> seguindo = new HashSet<>();

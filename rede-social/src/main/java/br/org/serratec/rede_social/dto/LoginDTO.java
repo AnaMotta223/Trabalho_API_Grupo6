@@ -1,4 +1,4 @@
-package br.org.serratec.rede_social_dto.dto;
+package br.org.serratec.rede_social.dto;
 
 public class LoginDTO {
 	
