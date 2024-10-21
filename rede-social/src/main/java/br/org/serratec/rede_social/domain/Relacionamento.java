@@ -23,7 +23,7 @@ public class Relacionamento {
 	public Relacionamento(Usuario seguidor, Usuario seguindo, LocalDate dataInicioSeguimento) {
 		this.id.setSeguidor(seguidor);
 		this.id.setSeguidor(seguidor);
-		this.dataInicioSeguimento = dataInicioSeguimento;
+		this.dataInicioSeguimento = LocalDate.now();
 	}
 
 	public UsuarioRelacionamentoPK getId() {

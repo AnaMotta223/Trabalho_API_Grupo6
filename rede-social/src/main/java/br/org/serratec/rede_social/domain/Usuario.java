@@ -1,9 +1,15 @@
 package br.org.serratec.rede_social.domain;
 
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+
+//import org.springframework.security.core.GrantedAuthority;
+//import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -12,10 +18,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinColumns;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -26,30 +28,26 @@ import jakarta.validation.constraints.Size;
 @Entity
 @Table(name = "usuario")
 public class Usuario {
-	
+
+	//implements UserDetails, Serializable
+	//private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotBlank(message = "Preencha o campo nome")
 	@Column(name = "nome", nullable = false, length = 50)
 	private String nome;
 	
-	@NotBlank(message = "Preencha o campo sobrenome")
 	@Column(name = "sobrenome", nullable = false, length = 100)
 	private String sobrenome;
 	
-	@NotBlank(message = "Preencha o campo email")
 	@Column(name = "email", nullable = false, unique = true, length = 50)
 	private String email;
 	
-	@NotBlank(message = "Preencha o campo senha")
-	@Size(min = 8, max = 12, message = "A senha deve ter entre {min} e {max} caracteres")
 	@Column(name = "senha", nullable = false, length = 12)
 	private String senha;
 	
-	@NotNull(message = "Preencha o campo dataNascimento no formato yyyy-MM-dd")
-	@Past(message = "A data informada não pode exceder a data atual")
 	@Column(name = "data_nascimento", nullable = false)
 	private LocalDate dataNascimento;
 	
@@ -161,5 +159,20 @@ public class Usuario {
 		Usuario other = (Usuario) obj;
 		return Objects.equals(id, other.id);
 	}
-	
+/*
+	@Override
+	public String getPassword() {
+		return senha;
+	}
+
+	@Override
+	public String getUsername() {
+		return email;
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return Collections.emptyList();
+	}
+	*/
 }
