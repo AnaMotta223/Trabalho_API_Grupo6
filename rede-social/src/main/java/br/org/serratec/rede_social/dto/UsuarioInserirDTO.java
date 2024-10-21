@@ -18,10 +18,11 @@ public class UsuarioInserirDTO {
 	private Set<Usuario> seguindo;
 	private Set<Postagem> postagens;
 	
+	
+	
 	public String getNome() {
 		return nome;
 	}
-	
 	
 	public Set<Usuario> getSeguidores() {
 		return seguidores;
@@ -46,25 +47,30 @@ public class UsuarioInserirDTO {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+	
 	public String getEmail() {
 		return email;
 	}
+	
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
 	public String getSenha() {
 		return senha;
 	}
+	
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
+	
 	public String getConfirmaSenha() {
 		return confirmaSenha;
 	}
+	
 	public void setConfirmaSenha(String confirmaSenha) {
 		this.confirmaSenha = confirmaSenha;
 	}
-
 
 	public String getSobrenome() {
 		return sobrenome;

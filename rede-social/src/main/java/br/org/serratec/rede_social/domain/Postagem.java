@@ -25,16 +25,12 @@ public class Postagem {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@NotBlank(message = "Preencha o campo conteudo")
-	@Size(min = 1, max = 280, message = "O conteúdo da postagem deve ter entre {min} e {max} caracteres")
 	@Column(name = "conteudo", nullable = false, length = 280)
 	private String conteudo;
 	
 	@Column(name = "data_hora_criacao", nullable = false)
 	private LocalDateTime dataHoraCriacao;
 	
-	//revisar not blank e propriedades da coluna
-	//@NotBlank(message = "Preencha o campo autor")
 	@ManyToOne
 	@JoinColumn(name = "id_usuario")
 	private Usuario autor;
