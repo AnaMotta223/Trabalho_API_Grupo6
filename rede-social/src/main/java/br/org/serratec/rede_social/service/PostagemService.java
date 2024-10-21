@@ -10,6 +10,7 @@ import br.org.serratec.rede_social.repository.PostagemRepository;
 
 @Service
 public class PostagemService {
+
 	
 	@Autowired
 	private PostagemRepository postagemRepository;
@@ -21,4 +22,4 @@ public class PostagemService {
 		return postagemOpt.get();
 	}
 }
-	
+

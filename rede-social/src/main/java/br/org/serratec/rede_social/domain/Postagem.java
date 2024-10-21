@@ -28,17 +28,13 @@ public class Postagem {
 	@Schema(description = "Identificador único da postagem")
 	private Long id;
 	
-	@NotBlank(message = "Preencha o campo conteudo")
-	@Size(min = 1, max = 280, message = "O conteúdo da postagem deve ter entre {min} e {max} caracteres")
 	@Column(name = "conteudo", nullable = false, length = 280)
 	@Schema(description = "Conteúdo da postagem", requiredMode = RequiredMode.REQUIRED)
 	private String conteudo;
 	
 	@Column(name = "data_hora_criacao", nullable = false)
 	private LocalDateTime dataHoraCriacao;
-	
-	
-	//@NotBlank(message = "Preencha o campo autor")
+
 	@ManyToOne
 	@JoinColumn(name = "id_usuario")
 	@Schema(description = "Autor da postagem", requiredMode = RequiredMode.REQUIRED)
