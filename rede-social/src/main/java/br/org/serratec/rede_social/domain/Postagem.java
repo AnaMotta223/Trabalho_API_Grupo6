@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,32 +25,37 @@ public class Postagem {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Schema(description = "Identificador único da postagem")
 	private Long id;
 	
 	@NotBlank(message = "Preencha o campo conteudo")
 	@Size(min = 1, max = 280, message = "O conteúdo da postagem deve ter entre {min} e {max} caracteres")
 	@Column(name = "conteudo", nullable = false, length = 280)
+	@Schema(description = "Conteúdo da postagem", requiredMode = RequiredMode.REQUIRED)
 	private String conteudo;
 	
 	@Column(name = "data_hora_criacao", nullable = false)
 	private LocalDateTime dataHoraCriacao;
 	
-	//revisar not blank e propriedades da coluna
+	
 	//@NotBlank(message = "Preencha o campo autor")
 	@ManyToOne
 	@JoinColumn(name = "id_usuario")
+	@Schema(description = "Autor da postagem", requiredMode = RequiredMode.REQUIRED)
 	private Usuario autor;
 	
 	@OneToMany(mappedBy = "postagem")
 	private List<Comentario> comentarios = new ArrayList<>();
 	
 
-	public Postagem() { }
+	public Postagem() { 
+		this.dataHoraCriacao = LocalDateTime.now();
+	}
 	
-	public Postagem(Long id, String conteudo, Usuario autor, LocalDateTime dataHoraCriacao) {
+	public Postagem(Long id, String conteudo, Usuario autor) {
 		this.id = id;
 		this.conteudo = conteudo;
-		this.dataHoraCriacao = dataHoraCriacao;
+		this.dataHoraCriacao = LocalDateTime.now();
 		this.autor = autor;
 	}
 
@@ -77,6 +84,7 @@ public class Postagem {
 		this.conteudo = conteudo;
 	}
 
+	
 	public LocalDateTime getDataHoraCriacao() {
 		return dataHoraCriacao;
 	}
