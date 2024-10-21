@@ -11,13 +11,15 @@ import br.org.serratec.rede_social.repository.PostagemRepository;
 @Service
 public class PostagemService {
 
-    @Autowired
-    private PostagemRepository postagemRepository;
-
-
-    public Postagem buscar (Long id) {
-        Optional<Postagem> postagemOpt = postagemRepository.findById(id);
-        return postagemOpt.get();
-    }
-
+	
+	@Autowired
+	private PostagemRepository postagemRepository;
+	
+	
+	
+	public Postagem buscar (Long id) {
+		Optional<Postagem> postagemOpt = postagemRepository.findById(id);
+		return postagemOpt.get();
+	}
 }
+
