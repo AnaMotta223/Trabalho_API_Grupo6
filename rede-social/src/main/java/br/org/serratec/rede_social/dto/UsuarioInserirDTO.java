@@ -14,36 +14,12 @@ public class UsuarioInserirDTO {
 	private LocalDate dataNascimento;
 	private String senha;
 	private String confirmaSenha;
-	private Set<Usuario> seguidores;
-	private Set<Usuario> seguindo;
-	private Set<Postagem> postagens;
-	
 	
 	
 	public String getNome() {
 		return nome;
 	}
 	
-	public Set<Usuario> getSeguidores() {
-		return seguidores;
-	}
-
-
-	public void setSeguidores(Set<Usuario> seguidores) {
-		this.seguidores = seguidores;
-	}
-
-
-	public Set<Usuario> getSeguindo() {
-		return seguindo;
-	}
-
-
-	public void setSeguindo(Set<Usuario> seguindo) {
-		this.seguindo = seguindo;
-	}
-
-
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
@@ -89,16 +65,6 @@ public class UsuarioInserirDTO {
 
 	public void setDataNascimento(LocalDate dataNascimento) {
 		this.dataNascimento = dataNascimento;
-	}
-
-
-	public Set<Postagem> getPostagens() {
-		return postagens;
-	}
-
-
-	public void setPostagens(Set<Postagem> postagens) {
-		this.postagens = postagens;
 	}
 	
 }

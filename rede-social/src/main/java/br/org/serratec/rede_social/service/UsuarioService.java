@@ -1,6 +1,5 @@
 package br.org.serratec.rede_social.service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -54,10 +53,6 @@ public class UsuarioService {
 		return usuarioOpt.get();
 	}
 	
-//	public Optional<Usuario> buscar(Long id) {
-//		return usuarioRepository.findById(id);
-//	}
-	
 	@Transactional
 	public UsuarioDTO inserir(UsuarioInserirDTO usuarioInserirDTO) throws EmailException, SenhaException{
 		
@@ -95,6 +90,15 @@ public class UsuarioService {
 	      Usuario usuario = UsuarioOpt.get();
 
 		  if(UsuarioOpt.isPresent()) {
+			  
+			  if(usuarioRepository.findByEmail(usuarioInserirDTO.getEmail()) !=null) {
+					throw new EmailException("Email já existente!");
+				}
+				
+				if(!usuarioInserirDTO.getSenha().equals(usuarioInserirDTO.getConfirmaSenha())) {
+					throw new SenhaException("As senhas não coincidem");
+				}
+				
 				usuario.setId(id);
 				usuario.setNome(usuarioInserirDTO.getNome());
 				usuario.setSobrenome(usuarioInserirDTO.getSobrenome());
@@ -104,31 +108,6 @@ public class UsuarioService {
 				//usuario.setSenha(encoder.encode(usuarioInserirDTO.getSenha()));
 				usuario.setSenha(usuarioInserirDTO.getSenha());
 				
-				 Set<Relacionamento> seguidores = new HashSet<>();
-				 Set<Relacionamento> seguindo = new HashSet<>();
-				 Set<Postagem> postagens = new HashSet<>();
-					
-				 for (Usuario usuarioSeguindo : usuarioInserirDTO.getSeguindo()) {
-					usuarioSeguindo = buscar(usuarioSeguindo.getId());
-					Relacionamento relacionamento = new Relacionamento(usuario, usuarioSeguindo, LocalDate.now());
-					seguindo.add(relacionamento);
-				}
-					
-				for (Usuario usuarioSeguidor : usuarioInserirDTO.getSeguidores()) {
-					usuarioSeguidor = buscar(usuarioSeguidor.getId());
-					Relacionamento relacionamento = new Relacionamento(usuarioSeguidor, usuario, LocalDate.now());
-					seguidores.add(relacionamento);
-				}
-					
-				for (Postagem postagemUsuario : usuarioInserirDTO.getPostagens()) {
-					postagemUsuario = postagemService.buscar(postagemUsuario.getId());
-					//Postagem postagem = new Postagem(postagemUsuario);
-					postagens.add(postagemUsuario);
-					}
-					
-				usuario.setSeguidores(seguidores);
-				usuario.setSeguindo(seguindo);
-				usuario.setPostagens(postagens);
 				usuario = usuarioRepository.save(usuario);
 				return new UsuarioDTO(usuario);
 
@@ -138,7 +117,6 @@ public class UsuarioService {
 
 	    }
 
-	
 	
 	@Transactional
     public void deletar(Long id) {
