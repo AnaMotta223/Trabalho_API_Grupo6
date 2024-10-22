@@ -49,7 +49,7 @@ public class UsuarioController {
 //	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<UsuarioDTO> buscar(@PathVariable Long id){
+	public ResponseEntity<UsuarioDTO> buscar(@Valid @PathVariable Long id){
 		Usuario usuario = usuarioService.buscar(id);
 		if(usuario != null) {
 			UsuarioDTO usuarioDTO = new UsuarioDTO(usuario);
@@ -60,7 +60,7 @@ public class UsuarioController {
 	}
 	   
 	@PostMapping
-    public ResponseEntity<UsuarioDTO> criar(@Valid @RequestBody UsuarioInserirDTO usuarioInserirDTO){
+    public ResponseEntity<UsuarioDTO> criar(@RequestBody UsuarioInserirDTO usuarioInserirDTO){
 		UsuarioDTO usuarioDTO = usuarioService.inserir(usuarioInserirDTO);
 		
 		//cria uma uri com o id e substitui o id pelo id do usuario ("usuarios/id")

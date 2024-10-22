@@ -2,7 +2,7 @@ package br.org.serratec.rede_social.dto;
 
 public class LoginDTO {
 	
-	private String username;
+	public String username;
 	private String password;
 	
 	public String getUsername() {

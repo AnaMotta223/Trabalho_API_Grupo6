@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.org.serratec.rede_social.domain.Postagem;
@@ -33,9 +34,11 @@ public class UsuarioService {
 	
 	@Autowired
 	PostagemService postagemService;
+
+	@Autowired
+	private BCryptPasswordEncoder encoder;
 	
-	//@Autowired
-	//private BCryptPasswordEncoder encoder;
+
 	
 	public List<UsuarioDTO> listarTodos(){
 		List<Usuario> usuarios = usuarioRepository.findAll();
@@ -76,7 +79,7 @@ public class UsuarioService {
 		usuario.setDataNascimento(usuarioInserirDTO.getDataNascimento());
 		//colocar a senha criptografada
 		//usuario.setSenha(encoder.encode(usuarioInserirDTO.getSenha()));
-		usuario.setSenha(usuarioInserirDTO.getSenha());
+		usuario.setSenha(encoder.encode(usuarioInserirDTO.getSenha()));
 		
 		Set<Relacionamento> seguidores = new HashSet<>();
 		Set<Relacionamento> seguindo = new HashSet<>();

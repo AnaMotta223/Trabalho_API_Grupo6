@@ -1,21 +1,20 @@
 package br.org.serratec.rede_social.security;
 
-import java.io.IOException;
-
-import org.springframework.http.HttpHeaders;
-//import org.springframework.security.authentication.AuthenticationManager;
-//import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-//import org.springframework.security.core.context.SecurityContextHolder;
-//import org.springframework.security.core.userdetails.UserDetails;
-//import org.springframework.security.core.userdetails.UserDetailsService;
-//import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-/*
+import java.io.IOException;
+
+
 //se der erro de token vem pra cá (autorizacao)
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
 
@@ -35,6 +34,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
 		String header = request.getHeader(HttpHeaders.AUTHORIZATION);
 		if (header != null && header.startsWith("Bearer ")) {
 			UsernamePasswordAuthenticationToken auth = getAuthentication(header.substring(7));
+
 			if (auth != null) {
 				SecurityContextHolder.getContext().setAuthentication(auth);
 			}
@@ -46,9 +46,9 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter{
 		if(jwtUtil.isValidToken(token)) {
 			String username = jwtUtil.getUserName(token);
 			UserDetails user = userDetailsService.loadUserByUsername(username);
-			return new UsernamePasswordAuthenticationToken(user,null, user.getAuthorities());
+			return new UsernamePasswordAuthenticationToken(user,null, null);
 		}
 		return null;
 	}
 }
-*/
+

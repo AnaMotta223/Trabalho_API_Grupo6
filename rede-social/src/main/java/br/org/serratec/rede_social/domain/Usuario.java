@@ -1,12 +1,9 @@
 package br.org.serratec.rede_social.domain;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 //import org.springframework.security.core.GrantedAuthority;
 //import org.springframework.security.core.userdetails.UserDetails;
@@ -24,13 +21,15 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "usuario")
-public class Usuario {
+public class Usuario implements UserDetails, Serializable {
 
-	//implements UserDetails, Serializable
-	//private static final long serialVersionUID = 1L;
+	@Serial
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,7 +44,7 @@ public class Usuario {
 	@Column(name = "email", nullable = false, unique = true, length = 50)
 	private String email;
 	
-	@Column(name = "senha", nullable = false, length = 12)
+	@Column(name = "senha", nullable = false, length = 128)
 	private String senha;
 	
 	@Column(name = "data_nascimento", nullable = false)
@@ -60,7 +59,9 @@ public class Usuario {
 	@OneToMany(mappedBy = "autor", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private Set<Postagem> postagens = new HashSet<>();
 
-	public Usuario() { }
+	public Usuario() {
+
+	}
 
 	public Usuario(Long id, String nome, String sobrenome, String email, String senha,LocalDate dataNascimento) {
 		this.id = id;
@@ -159,7 +160,12 @@ public class Usuario {
 		Usuario other = (Usuario) obj;
 		return Objects.equals(id, other.id);
 	}
-/*
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		return Collections.emptyList();
+	}
+
 	@Override
 	public String getPassword() {
 		return senha;
@@ -169,10 +175,4 @@ public class Usuario {
 	public String getUsername() {
 		return email;
 	}
-
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Collections.emptyList();
-	}
-	*/
 }
