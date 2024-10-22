@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -22,28 +23,32 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "postagem")
+@Schema(description = "Representa uma postagem feita por um usuário")
 public class Postagem {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Schema(description = "Identificador único da postagem")
+	@Schema(description = "ID da postagem")
 	private Long id;
 	
 	@Column(name = "conteudo", nullable = false, length = 280)
-	@Schema(description = "Conteúdo da postagem", requiredMode = RequiredMode.REQUIRED)
+	@Schema(description = "Conteúdo da postagem")
 	private String conteudo;
 	
 	@Column(name = "data_hora_criacao", nullable = false)
+	@JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+	@Schema(description = "Data e hora de criação da postagem")
 	private LocalDateTime dataHoraCriacao;
 
 	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "id_usuario")
-	@Schema(description = "Autor da postagem", requiredMode = RequiredMode.REQUIRED)
+	@Schema(description = "Autor da postagem")
 	private Usuario autor;
 	
 	@JsonManagedReference
 	@OneToMany(mappedBy = "postagem")
+	@Schema(description = "Lista de comentários relacionados à postagem")
 	private List<Comentario> comentarios = new ArrayList<>();
 	
 
