@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,8 +19,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "postagem")
@@ -37,6 +36,7 @@ public class Postagem {
 	@Column(name = "data_hora_criacao", nullable = false)
 	private LocalDateTime dataHoraCriacao;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "id_usuario")
 	@Schema(description = "Autor da postagem", requiredMode = RequiredMode.REQUIRED)
