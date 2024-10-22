@@ -5,13 +5,24 @@ import java.util.Set;
 
 import br.org.serratec.rede_social.domain.Relacionamento;
 import br.org.serratec.rede_social.domain.Usuario;
+import io.swagger.v3.oas.annotations.media.Schema;
 
+@Schema(description = "Classe DTO que representa um usuário com seus detalhes e relacionamentos")
 public class UsuarioDTO {
 
+	@Schema(description = "Id do usuário")
 	private Long id;
+	
+	@Schema(description = "Nome do usuário")
 	private String nome;
+	
+	@Schema(description = "Email do usuário")
 	private String email;
+	
+	@Schema(description = "Seguidores do usuário")
 	private Set<Usuario> seguidores;
+	
+	@Schema(description = "Pessoas que seguem o usuário")
 	private Set<Usuario> seguindo;
 	
 	public UsuarioDTO() {

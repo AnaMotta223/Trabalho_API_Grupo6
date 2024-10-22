@@ -1,18 +1,31 @@
 package br.org.serratec.rede_social.dto;
 
 import java.time.LocalDate;
-import java.util.Set;
 
-import br.org.serratec.rede_social.domain.Postagem;
-import br.org.serratec.rede_social.domain.Usuario;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Esta classe representa um objeto usuário com seus detalhes e relacionamentos")
 public class UsuarioInserirDTO {
 	
+	@Schema(description = "ID do usuário")
 	private String nome;
+	
+	@Schema(description = "Sobrenome do usuário")
 	private String sobrenome;
+	
+	@Schema(description = "Email do usuário")
 	private String email;
+	
+	@Schema(description = "Data de nascimento do usuário")
+	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate dataNascimento;
+	
+	@Schema(description = "Senha do usuário")
 	private String senha;
+	
+	@Schema(description = "Confirma senha do usuário")
 	private String confirmaSenha;
 	
 	
