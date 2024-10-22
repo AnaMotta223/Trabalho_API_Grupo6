@@ -1,5 +1,179 @@
 package br.org.serratec.rede_social.controller;
+
 import java.util.List;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+import br.org.serratec.rede_social.domain.Comentario;
+import br.org.serratec.rede_social.service.ComentarioService;
+import jakarta.validation.Valid;
+
+@RestController
+@RequestMapping("/comentarios")
+public class ComentarioController {
+
+	
+//    @Autowired
+//    private Comentario comentarioRepository;
+	
+    @Autowired
+    private ComentarioService comentarioService;
+
+    @GetMapping
+    public List<Comentario> listar() {
+        return comentarioService.listar();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Comentario> pesquisar(@PathVariable Long id) {
+        Optional<Comentario> comentarioOpt = comentarioService.buscarPorId(id);
+        if (comentarioOpt.isPresent()) {
+            return ResponseEntity.ok(comentarioOpt.get());
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Comentario inserir(@Valid @RequestBody Comentario comentario) {
+        return comentarioService.inserir(comentario);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Comentario> atualizar(@PathVariable Long id, @Valid @RequestBody Comentario comentario) {
+        Comentario comentarioAtualizado = comentarioService.atualizar(id, comentario);
+        if (comentarioAtualizado == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(comentarioAtualizado);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> remover(@PathVariable Long id) {
+        if (!comentarioService.remover(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.noContent().build();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,16 +265,16 @@ public class ComentarioController {
 	}
   */  
 	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> remover(@PathVariable Long id) {
-		if (!comentarioRepository.existsById(id)) {
-			return ResponseEntity.notFound().build();
-		}
-		comentarioRepository.deleteById(id);
-		return ResponseEntity.noContent().build();
-	}
+//	@DeleteMapping("/{id}")
+//	public ResponseEntity<Void> remover(@PathVariable Long id) {
+		//if (!comentarioRepository.existsById(id)) {
+	//		return ResponseEntity.notFound().build();
+	//	}
+	//	comentarioRepository.deleteById(id);
+//		return ResponseEntity.noContent().build();
+//	}
 	
 	
 	
-  }
+ //  } 
 
