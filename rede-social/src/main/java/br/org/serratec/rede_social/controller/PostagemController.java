@@ -21,10 +21,12 @@ import br.org.serratec.rede_social.service.PostagemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/postagens")
+@Tag(name = "Postagem", description = "Operações relacionadas as postagens")
 public class PostagemController {
 
 	
@@ -84,6 +86,7 @@ public class PostagemController {
 				@ApiResponse(responseCode = "400", description = "Requisição inválida"),
 				@ApiResponse(responseCode = "401", description = "Erro na autenticação"),
 				@ApiResponse(responseCode = "403", description = "Operação proibida e não pode ser concluída"),
+				@ApiResponse(responseCode = "422", description = "Dados de requisição inválidos"),
 				@ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
 				@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") 
 			}
@@ -106,6 +109,7 @@ public class PostagemController {
 				@ApiResponse(responseCode = "400", description = "Requisição inválida"),
 				@ApiResponse(responseCode = "401", description = "Erro na autenticação"),
 				@ApiResponse(responseCode = "403", description = "Operação proibida e não pode ser concluída"),
+				@ApiResponse(responseCode = "422", description = "Dados de requisição inválidos"),
 				@ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
 				@ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
 				@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") 
