@@ -3,6 +3,8 @@ package br.org.serratec.rede_social.domain;
 import java.time.LocalDate;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,8 +12,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 @Entity
 public class Comentario {
@@ -27,6 +27,7 @@ public class Comentario {
 	@Column(name = "data_criacao", nullable = false)
 	private LocalDate dataCriacao;
 	
+	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "id_postagem")
 	private Postagem postagem;
