@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.persistence.Column;
@@ -40,6 +42,7 @@ public class Postagem {
 	@Schema(description = "Autor da postagem", requiredMode = RequiredMode.REQUIRED)
 	private Usuario autor;
 	
+	@JsonManagedReference
 	@OneToMany(mappedBy = "postagem")
 	private List<Comentario> comentarios = new ArrayList<>();
 	

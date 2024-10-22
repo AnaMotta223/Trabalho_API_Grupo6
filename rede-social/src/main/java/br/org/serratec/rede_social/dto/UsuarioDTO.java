@@ -3,7 +3,6 @@ package br.org.serratec.rede_social.dto;
 import java.util.HashSet;
 import java.util.Set;
 
-import br.org.serratec.rede_social.domain.Postagem;
 import br.org.serratec.rede_social.domain.Relacionamento;
 import br.org.serratec.rede_social.domain.Usuario;
 
@@ -14,7 +13,6 @@ public class UsuarioDTO {
 	private String email;
 	private Set<Usuario> seguidores;
 	private Set<Usuario> seguindo;
-	public Set<Postagem> postagens;
 	
 	public UsuarioDTO() {
 	}
@@ -34,16 +32,12 @@ public class UsuarioDTO {
 		this.email = usuario.getEmail();
 		this.seguidores = new HashSet<>();
 		this.seguindo = new HashSet<>();
-		this.postagens = new HashSet<>();
 		
 		for(Relacionamento relacionamento : usuario.getSeguidores()) {
 			this.seguidores.add(relacionamento.getId().getSeguidor());
 		}
 		for(Relacionamento relacionamento : usuario.getSeguindo()) {
 			this.seguindo.add(relacionamento.getId().getSeguindo());
-		}
-		for(Postagem postagem : usuario.getPostagens()) {
-			this.postagens.add(postagem);
 		}
 		
 	}
@@ -97,14 +91,4 @@ public class UsuarioDTO {
 		this.seguindo = seguindo;
 	}
 
-
-	public Set<Postagem> getPostagens() {
-		return postagens;
-	}
-
-
-	public void setPostagens(Set<Postagem> postagens) {
-		this.postagens = postagens;
-	}
-	
 }
