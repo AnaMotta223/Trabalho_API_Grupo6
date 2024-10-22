@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,11 +18,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "postagem")
+@Schema(description = "Representa uma postagem feita por um usuário")
 public class Postagem {
 	
 	@Id
@@ -31,19 +30,22 @@ public class Postagem {
 	private Long id;
 	
 	@Column(name = "conteudo", nullable = false, length = 280)
-	@Schema(description = "Conteúdo da postagem", requiredMode = RequiredMode.REQUIRED)
+	@Schema(description = "Conteúdo da postagem")
 	private String conteudo;
 	
 	@Column(name = "data_hora_criacao", nullable = false)
+	@JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+	@Schema(description = "Data e hora de criação da postagem")
 	private LocalDateTime dataHoraCriacao;
 
 	@ManyToOne
 	@JoinColumn(name = "id_usuario")
-	@Schema(description = "Autor da postagem", requiredMode = RequiredMode.REQUIRED)
+	@Schema(description = "Autor da postagem")
 	private Usuario autor;
 	
 	@JsonManagedReference
 	@OneToMany(mappedBy = "postagem")
+	@Schema(description = "Lista de comentários relacionados à postagem")
 	private List<Comentario> comentarios = new ArrayList<>();
 	
 

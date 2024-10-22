@@ -3,22 +3,26 @@ package br.org.serratec.rede_social.domain;
 import java.io.Serializable;
 import java.util.Objects;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Embeddable
+@Schema(description = "Chave composta que armazena as referências ao usuário seguidor e ao usuário seguido")
 public class UsuarioRelacionamentoPK implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_usuario_seguidor")
+	@Schema(description = "ID do usuário que está seguindo outro usuário")
 	//follower
 	private Usuario seguidor;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_usuario_seguindo")
+	@Schema(description = "ID do usuário que está sendo seguido")
 	//following
 	private Usuario seguindo;
 

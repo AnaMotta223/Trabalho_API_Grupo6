@@ -2,7 +2,6 @@ package br.org.serratec.rede_social.controller;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,15 +21,33 @@ import br.org.serratec.rede_social.domain.Usuario;
 import br.org.serratec.rede_social.dto.UsuarioDTO;
 import br.org.serratec.rede_social.dto.UsuarioInserirDTO;
 import br.org.serratec.rede_social.service.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/usuarios")
+@Tag(name = "Usuários", description = "Operações relacionadas aos usuários")
 public class UsuarioController {
 	
 	@Autowired
 	UsuarioService usuarioService;
 	
+	
+	@Operation(summary = "Lista todos os usuários", description = "A resposta lista os usuários cadastrados com todos os seus dados(nome,sobrenome, data de nascimento, seguidores e quem segue)")
+
+	@ApiResponses(value = { 
+			@ApiResponse(responseCode = "200", description = "Usuários listados com sucesso"),
+			@ApiResponse(responseCode = "204", description = "Conteúdo não localizado"),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida"),
+			@ApiResponse(responseCode = "401", description = "Erro na autenticação"),
+			@ApiResponse(responseCode = "403", description = "Operação proibida e não pode ser concluída"),
+			@ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
+			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") })
+
 	@GetMapping
 	public ResponseEntity<List<UsuarioDTO>> listar(){
 		return ResponseEntity.ok(usuarioService.listarTodos());
@@ -48,6 +65,17 @@ public class UsuarioController {
 //		return ResponseEntity.notFound().build();
 //	}
 	
+	@Operation(summary = "Buscar usuário por ID", description = "A resposta traz o usuário pelo ID selecionado")
+	@ApiResponses(value = { 
+			@ApiResponse(responseCode = "200", description = "Usuário encontrado"),
+			@ApiResponse(responseCode = "204", description = "Ususário não localizado"),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida"),
+			@ApiResponse(responseCode = "401", description = "Erro na autenticação"),
+			@ApiResponse(responseCode = "403", description = "Operação proibida e não pode ser concluída"),
+			@ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
+			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") })
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<UsuarioDTO> buscar(@PathVariable Long id){
 		Usuario usuario = usuarioService.buscar(id);
@@ -59,6 +87,17 @@ public class UsuarioController {
 		return ResponseEntity.notFound().build();
 	}
 	   
+	@Operation(summary = "Inserir um novo usuário", description = "A resposta cria um novo usuário com todos os seus dados (nome,sobrenome, email, senha e data de nascimento)")
+
+	@ApiResponses(value = { 
+			@ApiResponse(responseCode = "201", description = "Usuário criado com sucesso"),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida"),
+			@ApiResponse(responseCode = "401", description = "Erro na autenticação"),
+			@ApiResponse(responseCode = "403", description = "Operação proibida e não pode ser concluída"),
+			@ApiResponse(responseCode = "422", description = "Dados de requisição inválidos"),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
+			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") })
+	
 	@PostMapping
     public ResponseEntity<UsuarioDTO> criar(@Valid @RequestBody UsuarioInserirDTO usuarioInserirDTO){
 		UsuarioDTO usuarioDTO = usuarioService.inserir(usuarioInserirDTO);
@@ -79,6 +118,20 @@ public class UsuarioController {
 //	        return ResponseEntity.ok(usuarioDTO);
 //	    }
 	
+	@Operation(summary = "Alterar um usuário", description = "A resposta altera um usuario")
+
+	@ApiResponses(value = { 
+			@ApiResponse(responseCode = "200", description = "Usuário alterado com sucesso"),
+			@ApiResponse(responseCode = "204", description = "Usuário não localizado"),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida"),
+			@ApiResponse(responseCode = "401", description = "Erro na autenticação"),
+			@ApiResponse(responseCode = "403", description = "Operação proibida e não pode ser concluída"),
+			@ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
+			@ApiResponse(responseCode = "422", description = "Dados de requisição inválidos"),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
+			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") })
+
+	
 	 @PutMapping("/{id}")
 	 public ResponseEntity<UsuarioDTO> alterar(@PathVariable Long id,@RequestBody UsuarioInserirDTO usuarioInserirDTO){ 
 		 
@@ -91,6 +144,17 @@ public class UsuarioController {
 	 }
 	
 	
+	@Operation(summary = "Deletar um  usuário", description = "A resposta deleta um usuário")
+
+	@ApiResponses(value = { 
+			@ApiResponse(responseCode = "200", description = "Usuário removido com sucesso"),
+			@ApiResponse(responseCode = "204", description = "Usuário deletado"),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida"),
+			@ApiResponse(responseCode = "401", description = "Erro na autenticação"),
+			@ApiResponse(responseCode = "403", description = "Operação proibida e não pode ser concluída"),
+			@ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
+			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") })
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deletar(@PathVariable Long id){
 		usuarioService.deletar(id);
