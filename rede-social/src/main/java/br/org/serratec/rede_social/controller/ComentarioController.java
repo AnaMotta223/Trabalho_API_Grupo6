@@ -18,10 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.org.serratec.rede_social.domain.Comentario;
 import br.org.serratec.rede_social.service.ComentarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/comentarios")
+@Tag(name = "Comentarios", description = "Operações relacionadas aos comentários")
 public class ComentarioController {
 
 	
@@ -31,10 +36,34 @@ public class ComentarioController {
     @Autowired
     private ComentarioService comentarioService;
 
+    @Operation(summary = "Lista todos os comentarios", description = "A resposta lista os comentários feitos trazendo a hora e data de criação")
+	@ApiResponses(value = { 
+			@ApiResponse(responseCode = "200", description = "Comentários listados com sucesso"),
+			@ApiResponse(responseCode = "204", description = "Conteúdo não localizado"),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida"),
+			@ApiResponse(responseCode = "401", description = "Erro na autenticação"),
+			@ApiResponse(responseCode = "403", description = "Operação proibida e não pode ser concluída"),
+			@ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
+			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") })
+    
     @GetMapping
     public List<Comentario> listar() {
         return comentarioService.listar();
     }
+
+    
+    @Operation(summary = "Buscar comnetários por ID", description = "A resposta traz os comentários realizados pelo ID selecionado")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Comentário encontrado"),
+			@ApiResponse(responseCode = "204", description = "Comentário não encontrado"),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida"),
+			@ApiResponse(responseCode = "401", description = "Erro na autenticação"),
+			@ApiResponse(responseCode = "403", description = "Operação proibida e não pode ser concluída"),
+			@ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
+			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação")
+			})
 
     @GetMapping("/{id}")
     public ResponseEntity<Comentario> pesquisar(@PathVariable Long id) {
@@ -45,12 +74,35 @@ public class ComentarioController {
         return ResponseEntity.notFound().build();
     }
 
+    @Operation(summary = "Inserir um novo comentários", description = "A resposta cria um nov comentário, trazendo a hora e data de criação")
+
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "Um ou mais comentários criados com sucesso"),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida"),
+			@ApiResponse(responseCode = "401", description = "Erro na autenticação"),
+			@ApiResponse(responseCode = "403", description = "Operação proibida e não pode ser concluída"),
+			@ApiResponse(responseCode = "422", description = "Dados de requisição inválidos"),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
+			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Comentario inserir(@Valid @RequestBody Comentario comentario) {
         return comentarioService.inserir(comentario);
     }
 
+    @Operation(summary = "Alterar um  comentário", description = "A resposta altera um comentário")
+
+	@ApiResponses(value = { 
+			@ApiResponse(responseCode = "200", description = "Comentário alterado com sucesso"),
+			@ApiResponse(responseCode = "204", description = "Comentário não localizada"),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida"),
+			@ApiResponse(responseCode = "401", description = "Erro na autenticação"),
+			@ApiResponse(responseCode = "403", description = "Operação proibida e não pode ser concluída"),
+			@ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
+			@ApiResponse(responseCode = "422", description = "Dados de requisição inválidos"),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
+			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") })
+    
     @PutMapping("/{id}")
     public ResponseEntity<Comentario> atualizar(@PathVariable Long id, @Valid @RequestBody Comentario comentario) {
         Comentario comentarioAtualizado = comentarioService.atualizar(id, comentario);
@@ -60,6 +112,18 @@ public class ComentarioController {
         return ResponseEntity.ok(comentarioAtualizado);
     }
 
+    
+    @Operation(summary = "Deletar um comnetário", description = "A resposta deleta um comnetário")
+
+	@ApiResponses(value = { 
+			@ApiResponse(responseCode = "200", description = "Comnetário removido com sucesso"),
+			@ApiResponse(responseCode = "204", description = "Comnetário deletado"),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida"),
+			@ApiResponse(responseCode = "401", description = "Erro na autenticação"),
+			@ApiResponse(responseCode = "403", description = "Operação proibida e não pode ser concluída"),
+			@ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
+			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") })
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> remover(@PathVariable Long id) {
         if (!comentarioService.remover(id)) {
