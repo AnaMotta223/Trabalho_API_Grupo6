@@ -1,10 +1,13 @@
 package br.org.serratec.rede_social.domain;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 
 //import org.springframework.security.core.GrantedAuthority;
 //import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +24,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "usuario")
+@Schema(description = "Representa um usuário da rede social")
 public class Usuario {
 
 	//implements UserDetails, Serializable
@@ -28,30 +32,39 @@ public class Usuario {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Schema(description = "ID do usuário")
 	private Long id;
 	
 	@Column(name = "nome", nullable = false, length = 50)
+	@Schema(description = "Nome do usuário")
 	private String nome;
 	
 	@Column(name = "sobrenome", nullable = false, length = 100)
+	@Schema(description = "Sobrenome do usuário")
 	private String sobrenome;
 	
 	@Column(name = "email", nullable = false, unique = true, length = 50)
+	@Schema(description = "Email do usuário")
 	private String email;
 	
 	@Column(name = "senha", nullable = false, length = 12)
+	@Schema(description = "Senha do usuário")
 	private String senha;
 	
 	@Column(name = "data_nascimento", nullable = false)
+	@JsonFormat(pattern = "dd/MM/yyyy")
+	@Schema(description = "Data de nascimento do usuário")
 	private LocalDate dataNascimento;
 	
 	@OneToMany(mappedBy = "id.seguidor")
+	@Schema(description = "Seguidores do usuário")
 	private Set<Relacionamento> seguidores = new HashSet<>();
 	
 	@OneToMany(mappedBy = "id.seguindo")
 	private Set<Relacionamento> seguindo = new HashSet<>();
 	
 	@OneToMany(mappedBy = "autor", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@Schema(description = "Pessoas que seguem o usuário")
 	private Set<Postagem> postagens = new HashSet<>();
 
 	public Usuario() { }
