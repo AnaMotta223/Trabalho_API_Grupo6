@@ -12,6 +12,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -33,11 +34,13 @@ public class ConfigSeguranca {
     JwtUtil jwtUtil;
 
 
+
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
         //classe que permite fazer autenticação personalizada criada no usuariodetalheimpl
     }
+
 
     @Bean //Objeto inicializado pelo spring
     public SecurityFilterChain filterChain (HttpSecurity http, AuthenticationConfiguration authenticationConfiguration) throws Exception{
@@ -45,6 +48,7 @@ public class ConfigSeguranca {
         http.csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))//configuração do cors
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()//permite todos - nao precisa logar
                         .anyRequest().authenticated()
                 )
@@ -65,6 +69,8 @@ public class ConfigSeguranca {
 
         return http.build(); //metodo que captura todo request já feito e diz que precisa ser autenticado
     }
+
+
 
 
     @Bean
