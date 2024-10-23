@@ -2,19 +2,20 @@ package br.org.serratec.rede_social.service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.org.serratec.rede_social.domain.Postagem;
 import br.org.serratec.rede_social.domain.Relacionamento;
 import br.org.serratec.rede_social.domain.Usuario;
-import br.org.serratec.rede_social.dto.UsuarioInserirDTO;
 import br.org.serratec.rede_social.dto.UsuarioDTO;
+import br.org.serratec.rede_social.dto.UsuarioInserirDTO;
 import br.org.serratec.rede_social.exception.EmailException;
 import br.org.serratec.rede_social.exception.SenhaException;
 import br.org.serratec.rede_social.repository.PostagemRepository;
@@ -33,24 +34,40 @@ public class UsuarioService {
 	@Autowired
 	PostagemService postagemService;
 	
-	//@Autowired
-	//private BCryptPasswordEncoder encoder;
+	@Autowired
+	private BCryptPasswordEncoder encoder;
 	
 	public List<UsuarioDTO> listarTodos(){
 		List<Usuario> usuarios = usuarioRepository.findAll();
 		
 		List<UsuarioDTO> usuariosDTO = new ArrayList<>();
 		
+		
 		for(Usuario usuario : usuarios) {
 			usuariosDTO.add(new UsuarioDTO(usuario));
 		}
+		
 		
 		return usuariosDTO;
 	}
 	
 	public Usuario buscar(Long id) {
 		Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
+		
+		for (Relacionamento relacionamento : usuarioOpt.get().getSeguidores()) {
+			System.out.println("-------------------------------------------\n");
+			System.out.println(relacionamento.getId().getSeguindo().getId());
+			System.out.println(relacionamento.getId().getSeguidor().getId());
+		}
+		
+		for (Relacionamento relacionamento : usuarioOpt.get().getSeguindo()) {
+			System.out.println("++++++++++++++++++++++++++++++++++++++++\n");
+			System.out.println(relacionamento.getId().getSeguindo().getId());
+			System.out.println(relacionamento.getId().getSeguidor().getId());
+		}
+		
 		return usuarioOpt.get();
+		
 	}
 	
 	@Transactional
@@ -70,8 +87,8 @@ public class UsuarioService {
 		usuario.setEmail(usuarioInserirDTO.getEmail());
 		usuario.setDataNascimento(usuarioInserirDTO.getDataNascimento());
 		//colocar a senha criptografada
-		//usuario.setSenha(encoder.encode(usuarioInserirDTO.getSenha()));
-		usuario.setSenha(usuarioInserirDTO.getSenha());
+		usuario.setSenha(encoder.encode(usuarioInserirDTO.getSenha()));
+		//usuario.setSenha(usuarioInserirDTO.getSenha());
 		
 		Set<Relacionamento> seguidores = new HashSet<>();
 		Set<Relacionamento> seguindo = new HashSet<>();
@@ -105,8 +122,8 @@ public class UsuarioService {
 				usuario.setEmail(usuarioInserirDTO.getEmail());
 				usuario.setDataNascimento(usuarioInserirDTO.getDataNascimento());
 				//colocar a senha criptografada
-				//usuario.setSenha(encoder.encode(usuarioInserirDTO.getSenha()));
-				usuario.setSenha(usuarioInserirDTO.getSenha());
+				usuario.setSenha(encoder.encode(usuarioInserirDTO.getSenha()));
+				//usuario.setSenha(usuarioInserirDTO.getSenha());
 				
 				usuario = usuarioRepository.save(usuario);
 				return new UsuarioDTO(usuario);

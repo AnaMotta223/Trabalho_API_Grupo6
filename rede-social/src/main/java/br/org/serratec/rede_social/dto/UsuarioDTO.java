@@ -20,10 +20,10 @@ public class UsuarioDTO {
 	private String email;
 	
 	@Schema(description = "Seguidores do usuário")
-	private Set<Usuario> seguidores;
+	private Set<RelacionamentoDTO> seguidores;
 	
 	@Schema(description = "Pessoas que seguem o usuário")
-	private Set<Usuario> seguindo;
+	private Set<RelacionamentoDTO> seguindo;
 	
 	public UsuarioDTO() {
 	}
@@ -44,11 +44,11 @@ public class UsuarioDTO {
 		this.seguidores = new HashSet<>();
 		this.seguindo = new HashSet<>();
 		
-		for(Relacionamento relacionamento : usuario.getSeguidores()) {
-			this.seguidores.add(relacionamento.getId().getSeguidor());
-		}
 		for(Relacionamento relacionamento : usuario.getSeguindo()) {
-			this.seguindo.add(relacionamento.getId().getSeguindo());
+			this.seguidores.add(new RelacionamentoDTO(relacionamento.getId().getSeguidor()));
+		}
+		for(Relacionamento relacionamento : usuario.getSeguidores()) {
+			this.seguindo.add(new RelacionamentoDTO(relacionamento.getId().getSeguindo()));
 		}
 		
 	}
@@ -83,22 +83,22 @@ public class UsuarioDTO {
 	}
 
 
-	public Set<Usuario> getSeguidores() {
+	public Set<RelacionamentoDTO> getSeguidores() {
 		return seguidores;
 	}
 
 
-	public void setSeguidores(Set<Usuario> seguidores) {
+	public void setSeguidores(Set<RelacionamentoDTO> seguidores) {
 		this.seguidores = seguidores;
 	}
 
 
-	public Set<Usuario> getSeguindo() {
+	public Set<RelacionamentoDTO> getSeguindo() {
 		return seguindo;
 	}
 
 
-	public void setSeguindo(Set<Usuario> seguindo) {
+	public void setSeguindo(Set<RelacionamentoDTO> seguindo) {
 		this.seguindo = seguindo;
 	}
 

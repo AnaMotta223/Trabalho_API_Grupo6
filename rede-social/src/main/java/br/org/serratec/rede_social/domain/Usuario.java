@@ -1,17 +1,19 @@
 package br.org.serratec.rede_social.domain;
 
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-
-//import org.springframework.security.core.GrantedAuthority;
-//import org.springframework.security.core.userdetails.UserDetails;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,10 +27,10 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "usuario")
 @Schema(description = "Representa um usuário da rede social")
-public class Usuario {
+public class Usuario implements UserDetails, Serializable{
 
-	//implements UserDetails, Serializable
-	//private static final long serialVersionUID = 1L;
+	
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,7 +49,7 @@ public class Usuario {
 	@Schema(description = "Email do usuário")
 	private String email;
 	
-	@Column(name = "senha", nullable = false, length = 12)
+	@Column(name = "senha", nullable = false, length = 128)
 	@Schema(description = "Senha do usuário")
 	private String senha;
 	
@@ -166,7 +168,7 @@ public class Usuario {
 		Usuario other = (Usuario) obj;
 		return Objects.equals(id, other.id);
 	}
-/*
+
 	@Override
 	public String getPassword() {
 		return senha;
@@ -181,5 +183,5 @@ public class Usuario {
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return Collections.emptyList();
 	}
-	*/
+	
 }
