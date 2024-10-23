@@ -134,13 +134,6 @@ public class ComentarioController {
 		}
 		return ResponseEntity.noContent().build();
 	}
-
-	@GetMapping("/pagina")
-    public ResponseEntity<Page<Comentario>> listarPaginado(@PageableDefault(sort = "id",
-            direction = Sort.Direction.DESC, page = 0, size = 3) Pageable pageable){
-        Page<Comentario> comentarios = comentarioRepository.findAll(pageable);
-        return ResponseEntity.ok(comentarios);
-    }
 	
 }
 

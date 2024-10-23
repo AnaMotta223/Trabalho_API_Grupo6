@@ -14,6 +14,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Schema(description = "Representa um comentário feito em uma postagem")
@@ -24,7 +26,9 @@ public class Comentario {
 	@Column(name = "id_comentario")
 	@Schema(description = "ID do comentário")
 	private Long id;
-	
+
+	@NotBlank(message = "Adicione o texto do cometário!")
+	@Size(min = 2, max = 280, message = "O tamanho do comentário deve ter entre {min} a {max} caractere.")
 	@Column(name = "texto", nullable = false, length = 280)
 	@Schema(description = "Texto do comentário")
 	private String texto;
