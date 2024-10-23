@@ -2,7 +2,13 @@ package br.org.serratec.rede_social.controller;
 
 import java.util.List;
 
+import br.org.serratec.rede_social.repository.PostagemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,7 +38,9 @@ public class PostagemController {
 	
 	@Autowired
 	private PostagemService postagemService;
-	
+    @Autowired
+    private PostagemRepository postagemRepository;
+
 	@Operation(summary = "Lista todas as postagens", description = "A resposta lista as postagens feitas trazendo a hora e data de criação")
 			
 	@ApiResponses(value = {
@@ -46,7 +54,15 @@ public class PostagemController {
 			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") 
 		}
 	) 
-	
+
+
+	@GetMapping("/pagina")
+	public ResponseEntity<Page<PostagemDTO>> listarPaginado(@PageableDefault(sort = "id",
+			direction = Sort.Direction.ASC, page = 0, size = 3) Pageable pageable) {
+		Page<Postagem> postagens = postagemRepository.findAll(pageable);
+		List<PostagemDTO> postagemDTO = postagens.stream().map(PostagemDTO ::new).toList();
+		return ResponseEntity.ok(new PageImpl<>(postagemDTO, pageable, postagens.getTotalElements()));
+	}
 	
 	@GetMapping
 	public List<PostagemDTO> listar() {
@@ -140,15 +156,6 @@ public class PostagemController {
 				@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") 
 			}
 		) 
-	 
-//	 @DeleteMapping("/{id}")
-//	    public ResponseEntity<Void> remover(@PathVariable Long id) {
-//	        if (postagemService.buscar(id) == null) {
-//	            return ResponseEntity.notFound().build();
-//	        }
-//	        postagemService.remover(id);
-//	        return ResponseEntity.noContent().build();
-//	    }	 
 	 
 	 @DeleteMapping("/{id}")
 	    public ResponseEntity<Void> remover(@PathVariable Long id) {
