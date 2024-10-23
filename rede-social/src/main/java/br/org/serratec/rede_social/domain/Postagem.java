@@ -6,11 +6,9 @@ import java.util.List;
 import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,6 +18,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
 
 @Entity
 @Table(name = "postagem")
@@ -40,10 +39,12 @@ public class Postagem {
 	@Schema(description = "Data e hora de criação da postagem")
 	private LocalDateTime dataHoraCriacao;
 
+	@Valid
 	@ManyToOne
 	@JoinColumn(name = "id_usuario")
 	@Schema(description = "Autor da postagem")
 	private Usuario autor;
+	
 	
 	@JsonManagedReference
 	@OneToMany(mappedBy = "postagem")
