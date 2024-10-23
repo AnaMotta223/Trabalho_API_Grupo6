@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.org.serratec.rede_social.domain.Postagem;
-
 import br.org.serratec.rede_social.dto.PostagemDTO;
-
-
 import br.org.serratec.rede_social.service.PostagemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -52,7 +49,7 @@ public class PostagemController {
 	
 	
 	@GetMapping
-	public List<Postagem> listar() {
+	public List<PostagemDTO> listar() {
 		return postagemService.listar();
 	}
 	
@@ -70,14 +67,16 @@ public class PostagemController {
 	    })
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Postagem> buscar(@PathVariable Long id) {
+	public ResponseEntity<PostagemDTO> buscar(@PathVariable Long id) {
 		Postagem postagem = postagemService.buscar(id);
 		if (null == postagem) {
 			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.ok(postagem);
+		PostagemDTO postagemDTO = new PostagemDTO(postagem);
+		return ResponseEntity.ok(postagemDTO);
 	
-		}	
+	}	
+	 
 	
 	 @Operation(summary = "Inserir uma nova postagem", description = "A resposta cria uma nova postagem, trazendo a hora e data de criação")
 		
@@ -95,9 +94,8 @@ public class PostagemController {
 	 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)//retorna 201
-
-	public Postagem inserir(@RequestBody Postagem postagem) {
-  postagem = postagemService.inserir(postagem)
+	public PostagemDTO inserir(@RequestBody Postagem postagem) {
+		postagem = postagemService.inserir(postagem);
 		return new PostagemDTO(postagem);
 	}
 	 
@@ -119,12 +117,13 @@ public class PostagemController {
 	 
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Postagem> alterar(@PathVariable Long id, @Valid @RequestBody Postagem postagem) {
-		 Postagem postagens = postagemService.alterar(id, postagem);
-	        if (postagens == null) {
+	public ResponseEntity<PostagemDTO> alterar(@PathVariable Long id, @Valid @RequestBody Postagem postagem) {
+	        if (postagemService.buscar(id) == null) {
 	            return ResponseEntity.notFound().build();
 	        }
-	        return ResponseEntity.ok(postagens);
+	        Postagem postagens = postagemService.alterar(id, postagem);
+	        
+	        return ResponseEntity.ok(new PostagemDTO(postagens));
 	    }
 	 
 	 
@@ -142,12 +141,19 @@ public class PostagemController {
 			}
 		) 
 	 
+//	 @DeleteMapping("/{id}")
+//	    public ResponseEntity<Void> remover(@PathVariable Long id) {
+//	        if (postagemService.buscar(id) == null) {
+//	            return ResponseEntity.notFound().build();
+//	        }
+//	        postagemService.remover(id);
+//	        return ResponseEntity.noContent().build();
+//	    }	 
+	 
 	 @DeleteMapping("/{id}")
 	    public ResponseEntity<Void> remover(@PathVariable Long id) {
-	        if (!postagemService.remover(id)) {
-	            return ResponseEntity.notFound().build();
-	        }
+	        postagemService.remover(id);
 	        return ResponseEntity.noContent().build();
-	    }
+	    }	 
 	
 }

@@ -2,7 +2,6 @@ package br.org.serratec.rede_social.service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -53,19 +52,6 @@ public class UsuarioService {
 	
 	public Usuario buscar(Long id) {
 		Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
-		
-		for (Relacionamento relacionamento : usuarioOpt.get().getSeguidores()) {
-			System.out.println("-------------------------------------------\n");
-			System.out.println(relacionamento.getId().getSeguindo().getId());
-			System.out.println(relacionamento.getId().getSeguidor().getId());
-		}
-		
-		for (Relacionamento relacionamento : usuarioOpt.get().getSeguindo()) {
-			System.out.println("++++++++++++++++++++++++++++++++++++++++\n");
-			System.out.println(relacionamento.getId().getSeguindo().getId());
-			System.out.println(relacionamento.getId().getSeguidor().getId());
-		}
-		
 		return usuarioOpt.get();
 		
 	}
