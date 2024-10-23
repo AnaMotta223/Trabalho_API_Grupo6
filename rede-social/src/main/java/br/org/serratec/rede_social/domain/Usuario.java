@@ -39,13 +39,13 @@ public class Usuario implements UserDetails, Serializable{
 	private Long id;
 
 	@NotBlank(message = "Preencha o nome do usuário!")
-	@Size(max = 50, min = 3, message = "O tamanho do nome deve ter entre {min} a {max} caractere.")
+	@Size(max = 50, min = 3, message = "O tamanho do nome deve ter entre {min} a {max} caracteres.")
 	@Column(name = "nome", nullable = false, length = 50)
 	@Schema(description = "Nome do usuário")
 	private String nome;
 
 	@NotBlank(message = "Preencha o sobrenome do Usuário!")
-	@Size(max = 100, min = 2, message = "O tamanho do sobrenome deve ter entre {min} a {max} caractere.")
+	@Size(max = 100, min = 2, message = "O tamanho do sobrenome deve ter entre {min} a {max} caracteres.")
 	@Column(name = "sobrenome", nullable = false, length = 100)
 	@Schema(description = "Sobrenome do usuário")
 	private String sobrenome;
@@ -57,7 +57,7 @@ public class Usuario implements UserDetails, Serializable{
 	private String email;
 
 	@NotNull(message = "Preencha a senha!")
-	@Size(max = 128, min = 6, message = "O tamanho da senha deve ter entre {min} e {min} caractere. ")
+	@Size(max = 128, min = 6, message = "O tamanho da senha deve ter entre {min} e {min} caracteres. ")
 	@Column(name = "senha", nullable = false, length = 128)
 	@Schema(description = "Senha do usuário")
 	private String senha;

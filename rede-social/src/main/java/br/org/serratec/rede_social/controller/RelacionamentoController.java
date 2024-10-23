@@ -23,7 +23,7 @@ public class RelacionamentoController {
 	@Autowired
 	private RelacionamentoService relacionamentoService;
 	
-	@Operation(summary = "Seguindo um usuário", description = "A resposta permite que um usuário siga outro usuario")
+	@Operation(summary = "Seguir um usuário", description = "A resposta permite que um usuário siga outro usuario")
 
 	@ApiResponses(value = { 
 			@ApiResponse(responseCode = "200", description = "Usuário seguido com sucesso"),

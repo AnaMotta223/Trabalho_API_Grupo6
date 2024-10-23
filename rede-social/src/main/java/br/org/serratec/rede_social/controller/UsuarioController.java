@@ -45,7 +45,7 @@ public class UsuarioController {
 	@Autowired
 	UsuarioRepository usuarioRepository;
 
-	@Operation(summary = "Lista todos os usuários", description = "A resposta lista os usuários cadastrados com todos os seus dados(nome,sobrenome, data de nascimento, seguidores e quem segue)")
+	@Operation(summary = "Lista todos os usuários por página", description = "A resposta lista os usuários cadastrados com todos os seus dados(nome,sobrenome, data de nascimento, seguidores e quem segue)")
 
 	@ApiResponses(value = { 
 			@ApiResponse(responseCode = "200", description = "Usuários listados com sucesso"),
@@ -58,8 +58,31 @@ public class UsuarioController {
 			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") })
 	
 	@GetMapping
-	public ResponseEntity<List<UsuarioDTO>> listar() {
-		return ResponseEntity.ok(usuarioService.listarTodos());
+	public ResponseEntity<Page<UsuarioDTO>> listarPaginado(
+			@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0,size = 5)Pageable pageable) {
+		Page<Usuario> usuarios = usuarioRepository.findAll(pageable);
+		List<UsuarioDTO> usuariosDTO = usuarios.stream().map(UsuarioDTO :: new).toList();
+		return ResponseEntity.ok(new PageImpl<>(usuariosDTO, pageable, usuarios.getTotalElements()));
+		
+	}
+	
+	@Operation(summary = "Lista todos as postagens que um usuário fez", description = "A resposta lista todas as postagens feitas por determinado autor")
+
+    @ApiResponses(value = { 
+            @ApiResponse(responseCode = "200", description = "postagens listadas com sucesso"),
+            @ApiResponse(responseCode = "204", description = "Conteúdo não localizado"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "401", description = "Erro na autenticação"),
+            @ApiResponse(responseCode = "403", description = "Operação proibida e não pode ser concluída"),
+            @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
+            @ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") })
+	
+	@GetMapping("/buscarPostagem")
+	public ResponseEntity<Page<PostagemDTO>> buscarAutorPostagem(@RequestParam(defaultValue = "1") Long autorId, Pageable pageable) {
+		Page<Postagem> postagens = usuarioRepository.buscarAutorPostagem(autorId, pageable);
+		List<PostagemDTO> postagensDTO = postagens.stream().map(PostagemDTO :: new).toList();
+		return ResponseEntity.ok(new PageImpl<>(postagensDTO, pageable, postagens.getTotalElements()));
 	}
 
 	@Operation(summary = "Buscar usuário por ID", description = "A resposta traz o usuário pelo ID selecionado")
@@ -148,22 +171,4 @@ public class UsuarioController {
 		usuarioService.deletar(id);
 		return ResponseEntity.noContent().build();
 	}
-	
-	@GetMapping("/pagina")
-	public ResponseEntity<Page<UsuarioDTO>> listarPaginado(
-			@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0,size = 5)Pageable pageable) {
-		Page<Usuario> usuarios = usuarioRepository.findAll(pageable);
-		List<UsuarioDTO> usuariosDTO = usuarios.stream().map(UsuarioDTO :: new).toList();
-		return ResponseEntity.ok(new PageImpl<>(usuariosDTO, pageable, usuarios.getTotalElements()));
-		
-	}
-	
-	
-	@GetMapping("/buscarPostagem")
-	public ResponseEntity<Page<PostagemDTO>> buscarAutorPostagem(@RequestParam(defaultValue = "1") Long autorId, Pageable pageable) {
-		Page<Postagem> postagens = usuarioRepository.buscarAutorPostagem(autorId, pageable);
-		List<PostagemDTO> postagensDTO = postagens.stream().map(PostagemDTO :: new).toList();
-		return ResponseEntity.ok(new PageImpl<>(postagensDTO, pageable, postagens.getTotalElements()));
-	}
-
 }
