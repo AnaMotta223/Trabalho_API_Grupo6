@@ -33,9 +33,10 @@ public class ComentarioService {
 
     public Comentario atualizar(Long id, Comentario comentario) {
         if (!comentarioRepository.existsById(id)) {
-            return null; // 
+            return null; 
         }
         comentario.setId(id);
+        comentario.setDataCriacao(LocalDate.now());
         return comentarioRepository.save(comentario);
     }
 
