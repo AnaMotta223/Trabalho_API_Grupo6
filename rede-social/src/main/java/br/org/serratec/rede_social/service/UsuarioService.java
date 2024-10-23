@@ -23,113 +23,110 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class UsuarioService {
-	
+
 	@Autowired
 	UsuarioRepository usuarioRepository;
-	
+
 	@Autowired
 	PostagemRepository postagemRepository;
-	
+
 	@Autowired
 	PostagemService postagemService;
-	
+
 	@Autowired
 	private BCryptPasswordEncoder encoder;
-	
-	public List<UsuarioDTO> listarTodos(){
+
+	public List<UsuarioDTO> listarTodos() {
 		List<Usuario> usuarios = usuarioRepository.findAll();
-		
+
 		List<UsuarioDTO> usuariosDTO = new ArrayList<>();
-		
-		
-		for(Usuario usuario : usuarios) {
+
+		for (Usuario usuario : usuarios) {
 			usuariosDTO.add(new UsuarioDTO(usuario));
 		}
-		
-		
+
 		return usuariosDTO;
 	}
-	
+
 	public Usuario buscar(Long id) {
 		Optional<Usuario> usuarioOpt = usuarioRepository.findById(id);
 		return usuarioOpt.get();
-		
+
 	}
-	
+
 	@Transactional
-	public UsuarioDTO inserir(UsuarioInserirDTO usuarioInserirDTO) throws EmailException, SenhaException{
-		
-		if(usuarioRepository.findByEmail(usuarioInserirDTO.getEmail()) !=null) {
+	public UsuarioDTO inserir(UsuarioInserirDTO usuarioInserirDTO) throws EmailException, SenhaException {
+
+		if (usuarioRepository.findByEmail(usuarioInserirDTO.getEmail()) != null) {
 			throw new EmailException("Email já existente!");
 		}
-		
-		if(!usuarioInserirDTO.getSenha().equals(usuarioInserirDTO.getConfirmaSenha())) {
+
+		if (!usuarioInserirDTO.getSenha().equals(usuarioInserirDTO.getConfirmaSenha())) {
 			throw new SenhaException("As senhas não coincidem");
 		}
-		
+
 		Usuario usuario = new Usuario();
 		usuario.setNome(usuarioInserirDTO.getNome());
 		usuario.setSobrenome(usuarioInserirDTO.getSobrenome());
 		usuario.setEmail(usuarioInserirDTO.getEmail());
 		usuario.setDataNascimento(usuarioInserirDTO.getDataNascimento());
-		//colocar a senha criptografada
+		// colocar a senha criptografada
 		usuario.setSenha(encoder.encode(usuarioInserirDTO.getSenha()));
-		//usuario.setSenha(usuarioInserirDTO.getSenha());
-		
+		// usuario.setSenha(usuarioInserirDTO.getSenha());
+
 		Set<Relacionamento> seguidores = new HashSet<>();
 		Set<Relacionamento> seguindo = new HashSet<>();
 		Set<Postagem> postagens = new HashSet<>();
-			
+
 		usuario.setSeguidores(seguidores);
 		usuario.setSeguindo(seguindo);
 		usuario.setPostagens(postagens);
-		
+
 		usuario = usuarioRepository.save(usuario);
 		return new UsuarioDTO(usuario);
 	}
-	
-	  public UsuarioDTO editar(Long id, UsuarioInserirDTO usuarioInserirDTO) {
-		  Optional<Usuario>	UsuarioOpt = usuarioRepository.findById(id);
-	      Usuario usuario = UsuarioOpt.get();
 
-		  if(UsuarioOpt.isPresent()) {
-			  
-			  if(usuarioRepository.findByEmail(usuarioInserirDTO.getEmail()) !=null) {
-					throw new EmailException("Email já existente!");
-				}
-				
-				if(!usuarioInserirDTO.getSenha().equals(usuarioInserirDTO.getConfirmaSenha())) {
-					throw new SenhaException("As senhas não coincidem");
-				}
-				
-				usuario.setId(id);
-				usuario.setNome(usuarioInserirDTO.getNome());
-				usuario.setSobrenome(usuarioInserirDTO.getSobrenome());
-				usuario.setEmail(usuarioInserirDTO.getEmail());
-				usuario.setDataNascimento(usuarioInserirDTO.getDataNascimento());
-				//colocar a senha criptografada
-				usuario.setSenha(encoder.encode(usuarioInserirDTO.getSenha()));
-				//usuario.setSenha(usuarioInserirDTO.getSenha());
-				
-				usuario = usuarioRepository.save(usuario);
-				return new UsuarioDTO(usuario);
+	public UsuarioDTO editar(Long id, UsuarioInserirDTO usuarioInserirDTO) {
+		Optional<Usuario> UsuarioOpt = usuarioRepository.findById(id);
+		Usuario usuario = UsuarioOpt.get();
 
-		  }
-		  
-		  return null;
+		if (UsuarioOpt.isPresent()) {
 
-	    }
+			if (usuarioRepository.findByEmail(usuarioInserirDTO.getEmail()) != null) {
+				throw new EmailException("Email já existente!");
+			}
 
-	
+			if (!usuarioInserirDTO.getSenha().equals(usuarioInserirDTO.getConfirmaSenha())) {
+				throw new SenhaException("As senhas não coincidem");
+			}
+
+			usuario.setId(id);
+			usuario.setNome(usuarioInserirDTO.getNome());
+			usuario.setSobrenome(usuarioInserirDTO.getSobrenome());
+			usuario.setEmail(usuarioInserirDTO.getEmail());
+			usuario.setDataNascimento(usuarioInserirDTO.getDataNascimento());
+			// colocar a senha criptografada
+			usuario.setSenha(encoder.encode(usuarioInserirDTO.getSenha()));
+			// usuario.setSenha(usuarioInserirDTO.getSenha());
+
+			usuario = usuarioRepository.save(usuario);
+			return new UsuarioDTO(usuario);
+
+		}
+
+		return null;
+
+	}
+
 	@Transactional
-    public void deletar(Long id) {
-        Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
+	public void deletar(Long id) {
+		Optional<Usuario> optionalUsuario = usuarioRepository.findById(id);
 
-        if (optionalUsuario.isPresent()) {
-            usuarioRepository.delete(optionalUsuario.get());
-        } else {
-            throw new RuntimeException("Usuário com ID " + id + " não encontrado.");
-        }
-    }
-	
+		if (optionalUsuario.isPresent()) {
+			usuarioRepository.delete(optionalUsuario.get());
+		} else {
+			throw new RuntimeException("Usuário com ID " + id + " não encontrado.");
+		}
+	}
+
 }

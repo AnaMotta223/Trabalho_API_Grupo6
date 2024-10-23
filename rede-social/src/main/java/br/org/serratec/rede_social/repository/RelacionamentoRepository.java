@@ -9,10 +9,8 @@ import br.org.serratec.rede_social.domain.Relacionamento;
 import br.org.serratec.rede_social.domain.Usuario;
 import br.org.serratec.rede_social.domain.UsuarioRelacionamentoPK;
 
-
 @Repository
 public interface RelacionamentoRepository extends JpaRepository<Relacionamento, UsuarioRelacionamentoPK> {
 	Optional<Relacionamento> findByIdSeguidorAndIdSeguindo(Usuario seguidor, Usuario seguindo);
 
 }
-	

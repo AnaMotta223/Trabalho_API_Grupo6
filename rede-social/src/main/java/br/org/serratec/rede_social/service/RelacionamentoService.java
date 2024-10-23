@@ -24,7 +24,7 @@ public class RelacionamentoService {
 	public Relacionamento criarRelacionamento(Long usuarioId, Long seguindoId) {
 		Usuario seguidor = usuarioService.buscar(usuarioId); // buscando quem TA SEGUINDO
 		Usuario seguindo = usuarioService.buscar(seguindoId); // buscando quem TA SENDO SEGUIDO
-		
+
 		if (relacionamentoRepository.findByIdSeguidorAndIdSeguindo(seguidor, seguindo).isPresent()) {
 			throw new RuntimeException("Esse relacionamento já existe");
 
@@ -45,10 +45,11 @@ public class RelacionamentoService {
 
 		if (relacionamentoRepository.findByIdSeguidorAndIdSeguindo(seguidor, seguindo).isEmpty()) {
 			throw new RuntimeException("Esse relacionamento não existe");
-			
-		}		
-	
-		Optional<Relacionamento> relacionamento = relacionamentoRepository.findByIdSeguidorAndIdSeguindo(seguidor, seguindo); 
+
+		}
+
+		Optional<Relacionamento> relacionamento = relacionamentoRepository.findByIdSeguidorAndIdSeguindo(seguidor,
+				seguindo);
 
 		relacionamentoRepository.delete(relacionamento.get());
 	}

@@ -28,9 +28,8 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "usuario")
 @Schema(description = "Representa um usuário da rede social")
-public class Usuario implements UserDetails, Serializable{
+public class Usuario implements UserDetails, Serializable {
 
-	
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -67,21 +66,22 @@ public class Usuario implements UserDetails, Serializable{
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	@Schema(description = "Data de nascimento do usuário")
 	private LocalDate dataNascimento;
-	
+
 	@OneToMany(mappedBy = "id.seguidor")
 	@Schema(description = "Seguidores do usuário")
 	private Set<Relacionamento> seguidores = new HashSet<>();
-	
+
 	@OneToMany(mappedBy = "id.seguindo")
 	private Set<Relacionamento> seguindo = new HashSet<>();
-	
+
 	@OneToMany(mappedBy = "autor", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@Schema(description = "Pessoas que seguem o usuário")
 	private Set<Postagem> postagens = new HashSet<>();
 
-	public Usuario() { }
+	public Usuario() {
+	}
 
-	public Usuario(Long id, String nome, String sobrenome, String email, String senha,LocalDate dataNascimento) {
+	public Usuario(Long id, String nome, String sobrenome, String email, String senha, LocalDate dataNascimento) {
 		this.id = id;
 		this.nome = nome;
 		this.sobrenome = sobrenome;
@@ -89,7 +89,7 @@ public class Usuario implements UserDetails, Serializable{
 		this.senha = senha;
 		this.dataNascimento = dataNascimento;
 	}
-	
+
 	public Set<Relacionamento> getSeguidores() {
 		return seguidores;
 	}
@@ -193,5 +193,5 @@ public class Usuario implements UserDetails, Serializable{
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return Collections.emptyList();
 	}
-	
+
 }
