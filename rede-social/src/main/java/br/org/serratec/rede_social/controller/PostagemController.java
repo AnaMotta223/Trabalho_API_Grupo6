@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.org.serratec.rede_social.domain.Postagem;
-import br.org.serratec.rede_social.repository.PostagemRepository;
 import br.org.serratec.rede_social.service.PostagemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -32,9 +31,6 @@ public class PostagemController {
 	
 	@Autowired
 	private PostagemService postagemService;
-	
-	@Autowired
-	private PostagemRepository postagemRepository;
 	
 	@Operation(summary = "Lista todas as postagens", description = "A resposta lista as postagens feitas trazendo a hora e data de criação")
 			
@@ -52,8 +48,8 @@ public class PostagemController {
 	
 	
 	@GetMapping
-	public ResponseEntity<List<Postagem>> listar() {//metodo para buscar todas as postagens
-		return ResponseEntity.ok(postagemRepository.findAll());//retorna todas as postagens
+	public List<Postagem> listar() {//metodo para buscar todas as postagens
+		return postagemService.listar();//retorna todas as postagens
 	}
 	
 	
@@ -70,12 +66,12 @@ public class PostagemController {
 	    })
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Postagem> buscar(@PathVariable Long id) {//metodo para listar por id
-		Postagem postagem = postagemService.buscar(id);//busca pelo id
-		if (null == postagem) {//verifica se a postagem existe
-			return ResponseEntity.notFound().build();//caso nao exista retorna 404
+	public ResponseEntity<Postagem> buscar(@PathVariable Long id) {
+		Postagem postagem = postagemService.buscar(id);
+		if (null == postagem) {
+			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.ok(postagem);//caso exista retorna 200
+		return ResponseEntity.ok(postagem);
 	
 		}	
 	
@@ -95,9 +91,8 @@ public class PostagemController {
 	 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)//retorna 201
-	public Postagem inserir(@RequestBody Postagem postagem) {//metodo para inserir
-		postagem = postagemRepository.save(postagem);//salva a postagem
-		return postagem;//retorna a postagem
+	public Postagem inserir(@RequestBody Postagem postagem) {
+		return postagemService.inserir(postagem);
 	}
 	 
 	 
@@ -118,15 +113,22 @@ public class PostagemController {
 	 
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<Postagem> alterar(@PathVariable Long id, @Valid @RequestBody Postagem postagem) {
+	/*public ResponseEntity<Postagem> alterar(@PathVariable Long id, @Valid @RequestBody Postagem postagem) {
 		if (!postagemRepository.existsById(id)) {
 			return ResponseEntity.notFound().build();
 		}
 		postagem.setId(id);
 		postagem = postagemRepository.save(postagem);
 		return ResponseEntity.ok(postagem);
-	}
+	}*/
 	
+	 public ResponseEntity<Postagem> alterar(@PathVariable Long id, @Valid @RequestBody Postagem postagem) {
+		 Postagem postagens = postagemService.alterar(id, postagem);
+	        if (postagens == null) {
+	            return ResponseEntity.notFound().build();
+	        }
+	        return ResponseEntity.ok(postagens);
+	    }
 	 
 	 
 	 @Operation(summary = "Deletar uma  postagem", description = "A resposta deleta uma postagem")
@@ -143,13 +145,12 @@ public class PostagemController {
 			}
 		) 
 	 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> remover(@PathVariable Long id) {
-		if (!postagemRepository.existsById(id)) {
-			return ResponseEntity.notFound().build();
-		}
-		postagemRepository.deleteById(id);
-		return ResponseEntity.noContent().build();
-	}
+	 @DeleteMapping("/{id}")
+	    public ResponseEntity<Void> remover(@PathVariable Long id) {
+	        if (!postagemService.remover(id)) {
+	            return ResponseEntity.notFound().build();
+	        }
+	        return ResponseEntity.noContent().build();
+	    }
 	
 }
