@@ -9,10 +9,9 @@ import org.springframework.stereotype.Repository;
 
 import br.org.serratec.rede_social.domain.Comentario;
 
-
 @Repository
 public interface ComentarioRepository extends JpaRepository<Comentario, Long> {
-    
-	  @Query(value = "SELECT * FROM comentario WHERE data_criacao = ?1", nativeQuery = true)
-	    List<Comentario> findComentariosByDataCriacao(LocalDate dataCriacao);
+
+	@Query(value = "SELECT * FROM comentario WHERE data_criacao = ?1", nativeQuery = true)
+	List<Comentario> findComentariosByDataCriacao(LocalDate dataCriacao);
 }

@@ -25,7 +25,7 @@ import jakarta.validation.constraints.Size;
 @Table(name = "postagem")
 @Schema(description = "Representa uma postagem feita por um usuário")
 public class Postagem {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Schema(description = "ID da postagem")
@@ -36,7 +36,7 @@ public class Postagem {
 	@Column(name = "conteudo", nullable = false, length = 280)
 	@Schema(description = "Conteúdo da postagem")
 	private String conteudo;
-	
+
 	@Column(name = "data_hora_criacao", nullable = false)
 	@JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
 	@Schema(description = "Data e hora de criação da postagem")
@@ -46,18 +46,16 @@ public class Postagem {
 	@JoinColumn(name = "id_usuario")
 	@Schema(description = "Autor da postagem")
 	private Usuario autor;
-	
-	
+
 	@JsonManagedReference
 	@OneToMany(mappedBy = "postagem")
 	@Schema(description = "Lista de comentários relacionados à postagem")
 	private List<Comentario> comentarios = new ArrayList<>();
-	
 
-	public Postagem() { 
+	public Postagem() {
 		this.dataHoraCriacao = LocalDateTime.now();
 	}
-	
+
 	public Postagem(Long id, String conteudo, Usuario autor) {
 		this.id = id;
 		this.conteudo = conteudo;
@@ -77,7 +75,6 @@ public class Postagem {
 		return id;
 	}
 
-
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -90,7 +87,6 @@ public class Postagem {
 		this.conteudo = conteudo;
 	}
 
-	
 	public LocalDateTime getDataHoraCriacao() {
 		return dataHoraCriacao;
 	}
@@ -123,5 +119,5 @@ public class Postagem {
 		Postagem other = (Postagem) obj;
 		return Objects.equals(id, other.id);
 	}
-	
+
 }

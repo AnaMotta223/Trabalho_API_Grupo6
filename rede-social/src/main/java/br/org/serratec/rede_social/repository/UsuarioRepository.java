@@ -1,6 +1,5 @@
 package br.org.serratec.rede_social.repository;
 
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,11 +11,10 @@ import br.org.serratec.rede_social.domain.Usuario;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-	
+
 	Usuario findByEmail(String email);
-	
+
 	@Query(value = "SELECT p FROM Postagem p WHERE p.autor.id = :autorId")
 	Page<Postagem> buscarAutorPostagem(Long autorId, Pageable pageable);
-	
 
 }

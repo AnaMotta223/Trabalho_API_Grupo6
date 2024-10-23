@@ -20,7 +20,7 @@ import jakarta.validation.constraints.Size;
 @Entity
 @Schema(description = "Representa um comentário feito em uma postagem")
 public class Comentario {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id_comentario")
@@ -32,18 +32,18 @@ public class Comentario {
 	@Column(name = "texto", nullable = false, length = 280)
 	@Schema(description = "Texto do comentário")
 	private String texto;
-	
+
 	@Column(name = "data_criacao", nullable = false)
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	@Schema(description = "Data de criação do comentário")
 	private LocalDate dataCriacao;
-	
+
 	@JsonBackReference
 	@ManyToOne
 	@JoinColumn(name = "id_postagem")
 	@Schema(description = "A postagem à qual este comentário pertence")
 	private Postagem postagem;
-	
+
 	public Postagem getPostagem() {
 		return postagem;
 	}
@@ -92,5 +92,5 @@ public class Comentario {
 		Comentario other = (Comentario) obj;
 		return Objects.equals(id, other.id);
 	}
-	
+
 }

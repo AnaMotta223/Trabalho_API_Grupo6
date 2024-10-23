@@ -17,48 +17,45 @@ public class PostagemService {
 
 	@Autowired
 	private PostagemRepository postagemRepository;
-	
-	
-	 public List<PostagemDTO> listar() {
-		 List<Postagem> postagens = postagemRepository.findAll(); 
-		 List<PostagemDTO> postagensDTO = new ArrayList<>();
-		 
-		 for(Postagem postagem : postagens) {
-			 postagensDTO.add(new PostagemDTO(postagem));
-			}
-			
-			return postagensDTO;
-	 }
-	 
-	public Postagem buscar (Long id) {
+
+	public List<PostagemDTO> listar() {
+		List<Postagem> postagens = postagemRepository.findAll();
+		List<PostagemDTO> postagensDTO = new ArrayList<>();
+
+		for (Postagem postagem : postagens) {
+			postagensDTO.add(new PostagemDTO(postagem));
+		}
+
+		return postagensDTO;
+	}
+
+	public Postagem buscar(Long id) {
 		Optional<Postagem> postagemOpt = postagemRepository.findById(id);
 		return postagemOpt.get();
 	}
-	
-	 public Postagem inserir(@RequestBody Postagem postagem) {
-		 postagem = postagemRepository.save(postagem); 
-	        return postagem;
-	    }
 
-	 	 
-	 public Postagem alterar(Long id, Postagem postagem) {
-	        if (!postagemRepository.existsById(id)) {
-	            return null;  
-	        }
-	        postagem.setId(id);
-	        return postagemRepository.save(postagem);
-	    }
-	 
-	 public boolean remover(Long id) {
-         if (!postagemRepository.existsById(id)) {
-             return false;
-         }
-         postagemRepository.deleteById(id);
-         return true;
-     }
-	 
+	public Postagem inserir(@RequestBody Postagem postagem) {
+		postagem = postagemRepository.save(postagem);
+		return postagem;
+	}
+
+	public Postagem alterar(Long id, Postagem postagem) {
+		if (!postagemRepository.existsById(id)) {
+			return null;
+		}
+		postagem.setId(id);
+		return postagemRepository.save(postagem);
+	}
+
+	public boolean remover(Long id) {
+		if (!postagemRepository.existsById(id)) {
+			return false;
+		}
+		postagemRepository.deleteById(id);
+		return true;
+	}
+
 //	 public void remover(Long id) {
 //	        postagemRepository.deleteById(id);
 //	    }
 }
-

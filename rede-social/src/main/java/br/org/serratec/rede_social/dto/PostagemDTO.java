@@ -11,11 +11,11 @@ import br.org.serratec.rede_social.domain.Comentario;
 import br.org.serratec.rede_social.domain.Postagem;
 
 public class PostagemDTO {
-
+	
 	private Long id;
-
+	
 	private String conteudo;
-
+	
 	@JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
 	private LocalDateTime dataHoraCriacao;
 
@@ -60,5 +60,5 @@ public class PostagemDTO {
 	public void setComentarios(List<Comentario> comentarios) {
 		this.comentarios = comentarios;
 	}
-
+	
 }

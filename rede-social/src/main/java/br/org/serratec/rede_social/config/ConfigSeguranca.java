@@ -23,65 +23,65 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 
 @Configuration
-@EnableWebSecurity 
+@EnableWebSecurity
 public class ConfigSeguranca {
 
-    @Autowired
-    UserDetailsService userDetailsService;
+	@Autowired
+	UserDetailsService userDetailsService;
 
-    @Autowired
-    JwtUtil jwtUtil;
+	@Autowired
+	JwtUtil jwtUtil;
 
-    @Bean
-    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-        //classe que permite fazer autenticação personalizada criada no usuariodetalheimpl
-    }
+	@Bean
+	AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+			throws Exception {
+		return authenticationConfiguration.getAuthenticationManager();
+		// classe que permite fazer autenticação personalizada criada no
+		// usuariodetalheimpl
+	}
 
+	@Bean // Objeto inicializado pelo spring
+	public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationConfiguration authenticationConfiguration)
+			throws Exception {
 
-    @Bean //Objeto inicializado pelo spring
-    public SecurityFilterChain filterChain (HttpSecurity http, AuthenticationConfiguration authenticationConfiguration) throws Exception{
+		http.csrf(csrf -> csrf.disable()).cors(cors -> cors.configurationSource(corsConfigurationSource()))// configuração
+																											// do cors
+				.authorizeHttpRequests(authorize -> authorize.requestMatchers("/swagger-ui/**", "/v3/api-docs/**")
+						.permitAll().requestMatchers(HttpMethod.POST, "/usuarios").permitAll()// permite todos - nao
+																								// precisa logar
+						.anyRequest().authenticated())
+				.httpBasic(Customizer.withDefaults())
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        http.csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))//configuração do cors
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()//permite todos - nao precisa logar
-                        .anyRequest().authenticated()
-                )
-                .httpBasic(Customizer.withDefaults())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+		JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(
+				authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)), jwtUtil);
+		jwtAuthenticationFilter.setFilterProcessesUrl("/login");
 
-        JwtAuthenticationFilter jwtAuthenticationFilter =
-                new JwtAuthenticationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class))
-                        , jwtUtil);
-        jwtAuthenticationFilter.setFilterProcessesUrl("/login");
+		JwtAuthorizationFilter jwtAuthorizationFilter = new JwtAuthorizationFilter(
+				authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)), jwtUtil,
+				userDetailsService);
 
-        JwtAuthorizationFilter jwtAuthorizationFilter =
-                new JwtAuthorizationFilter(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)),
-                        jwtUtil, userDetailsService);
+		http.addFilter(jwtAuthenticationFilter);
+		http.addFilter(jwtAuthorizationFilter);
 
-        http.addFilter(jwtAuthenticationFilter);
-        http.addFilter(jwtAuthorizationFilter);
+		return http.build(); // metodo que captura todo request já feito e diz que precisa ser autenticado
+	}
 
-        return http.build(); //metodo que captura todo request já feito e diz que precisa ser autenticado
-    }
+	@Bean
+	CorsConfigurationSource corsConfigurationSource() { // configuração de quais dominios podem acessar nossa API
+		CorsConfiguration corsConfiguration = new CorsConfiguration();
+		corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+		corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
 
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() { //configuração de quais dominios podem acessar nossa API
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-        corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", corsConfiguration.applyPermitDefaultValues());
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", corsConfiguration.applyPermitDefaultValues());
+		return source;
+	}
 
-        return source;
-    }
-
-    @Bean
-    BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder(); 
-    }
+	@Bean
+	BCryptPasswordEncoder bCryptPasswordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
 }

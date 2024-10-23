@@ -10,20 +10,20 @@ import jakarta.persistence.ManyToOne;
 
 @Embeddable
 @Schema(description = "Chave composta que armazena as referências ao usuário seguidor e ao usuário seguido")
-public class UsuarioRelacionamentoPK implements Serializable{
+public class UsuarioRelacionamentoPK implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "id_usuario_seguidor")
 	@Schema(description = "ID do usuário que está seguindo outro usuário")
-	//follower
+	// follower
 	private Usuario seguidor;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "id_usuario_seguindo")
 	@Schema(description = "ID do usuário que está sendo seguido")
-	//following
+	// following
 	private Usuario seguindo;
 
 	public Usuario getSeguidor() {
@@ -58,5 +58,5 @@ public class UsuarioRelacionamentoPK implements Serializable{
 		UsuarioRelacionamentoPK other = (UsuarioRelacionamentoPK) obj;
 		return Objects.equals(seguindo, other.seguindo) && Objects.equals(seguidor, other.seguidor);
 	}
-	
+
 }

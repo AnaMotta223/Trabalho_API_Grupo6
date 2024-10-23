@@ -14,17 +14,18 @@ import jakarta.persistence.Table;
 @Table(name = "relacionamento")
 @Schema(description = "Representa um relacionamento de seguimento entre dois usuários")
 public class Relacionamento {
-	
+
 	@EmbeddedId
 	@Schema(description = "Chave composta que contém o ID do seguidor e o ID do usuário seguido.")
 	private UsuarioRelacionamentoPK id = new UsuarioRelacionamentoPK();
-	
+
 	@Column(name = "data_inicio_seguimento")
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	@Schema(description = "Data em que o seguidor começou a seguir o outro usuário.")
 	private LocalDate dataInicioSeguimento;
-	
-	public Relacionamento() { }
+
+	public Relacionamento() {
+	}
 
 	public Relacionamento(Usuario seguidor, Usuario seguindo, LocalDate dataInicioSeguimento) {
 		this.id.setSeguidor(seguidor);
@@ -47,5 +48,5 @@ public class Relacionamento {
 	public void setDataInicioSeguimento(LocalDate dataInicioSeguimento) {
 		this.dataInicioSeguimento = dataInicioSeguimento;
 	}
-	
+
 }
