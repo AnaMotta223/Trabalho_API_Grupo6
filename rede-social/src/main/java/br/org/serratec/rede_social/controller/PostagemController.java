@@ -110,7 +110,7 @@ public class PostagemController {
 	 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)//retorna 201
-	public PostagemDTO inserir(@RequestBody Postagem postagem) {
+	public PostagemDTO inserir(@Valid @RequestBody Postagem postagem) {
 		postagem = postagemService.inserir(postagem);
 		return new PostagemDTO(postagem);
 	}

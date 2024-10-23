@@ -121,7 +121,7 @@ public class UsuarioController {
 			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") })
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<UsuarioDTO> alterar(@PathVariable Long id, @RequestBody UsuarioInserirDTO usuarioInserirDTO) {
+	public ResponseEntity<UsuarioDTO> alterar(@PathVariable Long id,@Valid @RequestBody UsuarioInserirDTO usuarioInserirDTO) {
 
 		if (!usuarioService.buscar(id).equals("")) {
 			UsuarioDTO usuarioDTO = usuarioService.editar(id, usuarioInserirDTO);
