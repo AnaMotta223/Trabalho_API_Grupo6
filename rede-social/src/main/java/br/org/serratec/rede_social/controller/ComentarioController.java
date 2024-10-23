@@ -1,5 +1,9 @@
 package br.org.serratec.rede_social.controller;
 
+
+import java.time.LocalDate;
+import java.util.List;
+
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -87,7 +92,17 @@ public class ComentarioController {
 			@ApiResponse(responseCode = "422", description = "Dados de requisição inválidos"),
 			@ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
 			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") })
-	
+  
+    
+    @GetMapping("/por-data")
+    public ResponseEntity<List<Comentario>> buscarComentariosPorData(@RequestParam LocalDate dataCriacao) {
+        List<Comentario> comentarios = comentarioService.buscarComentariosPorData(dataCriacao);
+        if (comentarios.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(comentarios);
+    }  
+
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public Comentario inserir(@Valid @RequestBody Comentario comentario) {
@@ -126,15 +141,14 @@ public class ComentarioController {
 			@ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
 			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") })
 
-	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> remover(@PathVariable Long id) {
+  	@DeleteMapping("/{id}")
+	  public ResponseEntity<Void> remover(@PathVariable Long id) {
 		if (!comentarioService.remover(id)) {
 			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.noContent().build();
+		  return ResponseEntity.noContent().build();
 	}
-
-	
 	
 }
+
 

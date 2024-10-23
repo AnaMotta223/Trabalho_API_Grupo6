@@ -25,6 +25,10 @@ public class ComentarioService {
     public Optional<Comentario> buscarPorId(Long id) {
         return comentarioRepository.findById(id);
     }
+    
+    public List<Comentario> buscarComentariosPorData(LocalDate dataCriacao) {
+        return comentarioRepository.findComentariosByDataCriacao(dataCriacao);
+    }
 
     public Comentario inserir(Comentario comentario) {
         comentario.setDataCriacao(LocalDate.now()); 
