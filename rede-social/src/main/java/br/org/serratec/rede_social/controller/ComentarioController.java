@@ -3,7 +3,12 @@ package br.org.serratec.rede_social.controller;
 import java.util.List;
 import java.util.Optional;
 
+import br.org.serratec.rede_social.repository.ComentarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,15 +33,14 @@ import jakarta.validation.Valid;
 @RequestMapping("/comentarios")
 @Tag(name = "Comentarios", description = "Operações relacionadas aos comentários")
 public class ComentarioController {
-
-	
-//    @Autowired
-//    private Comentario comentarioRepository;
+	;
 	
     @Autowired
     private ComentarioService comentarioService;
+    @Autowired
+    private ComentarioRepository comentarioRepository;
 
-    @Operation(summary = "Lista todos os comentarios", description = "A resposta lista os comentários feitos trazendo a hora e data de criação")
+	@Operation(summary = "Lista todos os comentarios", description = "A resposta lista os comentários feitos trazendo a hora e data de criação")
 	@ApiResponses(value = { 
 			@ApiResponse(responseCode = "200", description = "Comentários listados com sucesso"),
 			@ApiResponse(responseCode = "204", description = "Conteúdo não localizado"),
@@ -46,7 +50,15 @@ public class ComentarioController {
 			@ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
 			@ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
 			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") })
-    
+
+
+	@GetMapping("/pagina")
+	public ResponseEntity<Page<Comentario>> listarPaginado(@PageableDefault(sort = "id",
+			direction = Sort.Direction.DESC, page = 0, size = 5) Pageable pageable){
+		Page<Comentario> comentarios = comentarioRepository.findAll(pageable);
+		return ResponseEntity.ok(comentarios);
+	}
+
     @GetMapping
     public List<Comentario> listar() {
         return comentarioService.listar();
