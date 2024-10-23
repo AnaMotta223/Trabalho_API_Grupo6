@@ -157,15 +157,6 @@ public class PostagemController {
 			}
 		) 
 	 
-//	 @DeleteMapping("/{id}")
-//	    public ResponseEntity<Void> remover(@PathVariable Long id) {
-//	        if (postagemService.buscar(id) == null) {
-//	            return ResponseEntity.notFound().build();
-//	        }
-//	        postagemService.remover(id);
-//	        return ResponseEntity.noContent().build();
-//	    }	 
-	 
 	 @DeleteMapping("/{id}")
 	    public ResponseEntity<Void> remover(@PathVariable Long id) {
 	        postagemService.remover(id);
