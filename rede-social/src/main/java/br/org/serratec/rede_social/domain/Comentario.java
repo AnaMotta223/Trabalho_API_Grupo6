@@ -30,7 +30,7 @@ public class Comentario {
 	private String texto;
 	
 	@Column(name = "data_criacao", nullable = false)
-	@JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+	@JsonFormat(pattern = "dd/MM/yyyy")
 	@Schema(description = "Data de criação do comentário")
 	private LocalDate dataCriacao;
 	

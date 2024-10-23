@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.org.serratec.rede_social.domain.Postagem;
+
+import br.org.serratec.rede_social.dto.PostagemDTO;
+
+
 import br.org.serratec.rede_social.service.PostagemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -48,8 +52,8 @@ public class PostagemController {
 	
 	
 	@GetMapping
-	public List<Postagem> listar() {//metodo para buscar todas as postagens
-		return postagemService.listar();//retorna todas as postagens
+	public List<Postagem> listar() {
+		return postagemService.listar();
 	}
 	
 	
@@ -91,8 +95,10 @@ public class PostagemController {
 	 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)//retorna 201
+
 	public Postagem inserir(@RequestBody Postagem postagem) {
-		return postagemService.inserir(postagem);
+  postagem = postagemService.inserir(postagem)
+		return new PostagemDTO(postagem);
 	}
 	 
 	 
@@ -113,16 +119,7 @@ public class PostagemController {
 	 
 	
 	@PutMapping("/{id}")
-	/*public ResponseEntity<Postagem> alterar(@PathVariable Long id, @Valid @RequestBody Postagem postagem) {
-		if (!postagemRepository.existsById(id)) {
-			return ResponseEntity.notFound().build();
-		}
-		postagem.setId(id);
-		postagem = postagemRepository.save(postagem);
-		return ResponseEntity.ok(postagem);
-	}*/
-	
-	 public ResponseEntity<Postagem> alterar(@PathVariable Long id, @Valid @RequestBody Postagem postagem) {
+	public ResponseEntity<Postagem> alterar(@PathVariable Long id, @Valid @RequestBody Postagem postagem) {
 		 Postagem postagens = postagemService.alterar(id, postagem);
 	        if (postagens == null) {
 	            return ResponseEntity.notFound().build();

@@ -5,10 +5,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.core.context.SecurityContextHolder;
-//import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +21,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.org.serratec.rede_social.domain.Postagem;
 import br.org.serratec.rede_social.domain.Usuario;
+import br.org.serratec.rede_social.dto.PostagemDTO;
 import br.org.serratec.rede_social.dto.UsuarioDTO;
 import br.org.serratec.rede_social.dto.UsuarioInserirDTO;
 import br.org.serratec.rede_social.repository.UsuarioRepository;
@@ -150,9 +150,10 @@ public class UsuarioController {
 	
 	
 	@GetMapping("/buscarPostagem")
-	public ResponseEntity<Page<Postagem>> buscarAutorPostagem(@RequestParam(defaultValue = "1") Long autorId, Pageable pageable) {
+	public ResponseEntity<Page<PostagemDTO>> buscarAutorPostagem(@RequestParam(defaultValue = "1") Long autorId, Pageable pageable) {
 		Page<Postagem> postagens = usuarioRepository.buscarAutorPostagem(autorId, pageable);
-		return ResponseEntity.ok(postagens);
+		List<PostagemDTO> postagensDTO = postagens.stream().map(PostagemDTO :: new).toList();
+		return ResponseEntity.ok(new PageImpl<>(postagensDTO, pageable, postagens.getTotalElements()));
 	}
 
 }

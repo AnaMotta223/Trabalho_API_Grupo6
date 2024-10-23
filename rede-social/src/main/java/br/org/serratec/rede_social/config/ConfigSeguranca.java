@@ -46,7 +46,9 @@ public class ConfigSeguranca {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))//configuração do cors
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()//permite todos - nao precisa logar
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
+                        
+                        //.anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
@@ -83,18 +85,5 @@ public class ConfigSeguranca {
     BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder(); //metodo para criptografar senha do usuario no bd
     }
-
-
-
-/*	@Bean
-	InMemoryUserDetailsManager userDetailsService() {
-		UserDetails user = User.withDefaultPasswordEncoder()
-				.username("teste")
-				.password("132456")
-				//.roles("usuario")
-				.build();
-		return new InMemoryUserDetailsManager(user);
-		// classe que configura o user default.
-	}*/
 
 }

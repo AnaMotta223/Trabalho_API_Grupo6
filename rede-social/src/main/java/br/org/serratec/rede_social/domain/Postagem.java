@@ -40,7 +40,6 @@ public class Postagem {
 	@Schema(description = "Data e hora de criação da postagem")
 	private LocalDateTime dataHoraCriacao;
 
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "id_usuario")
 	@Schema(description = "Autor da postagem")
