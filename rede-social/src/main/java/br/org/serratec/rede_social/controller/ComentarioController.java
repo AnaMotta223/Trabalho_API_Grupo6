@@ -1,10 +1,11 @@
 package br.org.serratec.rede_social.controller;
 
+
 import java.time.LocalDate;
 import java.util.List;
+
 import java.util.Optional;
 
-import br.org.serratec.rede_social.repository.ComentarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -91,8 +92,7 @@ public class ComentarioController {
 			@ApiResponse(responseCode = "422", description = "Dados de requisição inválidos"),
 			@ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
 			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") })
-
-   
+  
     
     @GetMapping("/por-data")
     public ResponseEntity<List<Comentario>> buscarComentariosPorData(@RequestParam LocalDate dataCriacao) {
@@ -102,7 +102,6 @@ public class ComentarioController {
         }
         return ResponseEntity.ok(comentarios);
     }  
-  
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
@@ -149,13 +148,6 @@ public class ComentarioController {
 		}
 		  return ResponseEntity.noContent().build();
 	}
-
-	@GetMapping("/pagina")
-   public ResponseEntity<Page<Comentario>> listarPaginado(@PageableDefault(sort = "id",
-            direction = Sort.Direction.DESC, page = 0, size = 3) Pageable pageable){
-        Page<Comentario> comentarios = comentarioRepository.findAll(pageable);
-        return ResponseEntity.ok(comentarios);
-    }
 	
 }
 
