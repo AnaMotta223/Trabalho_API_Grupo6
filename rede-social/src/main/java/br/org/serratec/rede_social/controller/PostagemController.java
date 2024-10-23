@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.org.serratec.rede_social.domain.Postagem;
+import br.org.serratec.rede_social.dto.PostagemDTO;
 import br.org.serratec.rede_social.repository.PostagemRepository;
 import br.org.serratec.rede_social.service.PostagemService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -95,9 +96,9 @@ public class PostagemController {
 	 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)//retorna 201
-	public Postagem inserir(@RequestBody Postagem postagem) {//metodo para inserir
+	public PostagemDTO inserir(@RequestBody Postagem postagem) {//metodo para inserir
 		postagem = postagemRepository.save(postagem);//salva a postagem
-		return postagem;//retorna a postagem
+		return new PostagemDTO(postagem);//retorna a postagem
 	}
 	 
 	 

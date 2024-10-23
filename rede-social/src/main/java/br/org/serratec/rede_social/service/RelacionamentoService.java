@@ -24,7 +24,7 @@ public class RelacionamentoService {
 	public Relacionamento criarRelacionamento(Long usuarioId, Long seguindoId) {
 		Usuario seguidor = usuarioService.buscar(usuarioId); // buscando quem TA SEGUINDO
 		Usuario seguindo = usuarioService.buscar(seguindoId); // buscando quem TA SENDO SEGUIDO
-
+		
 		if (relacionamentoRepository.findByIdSeguidorAndIdSeguindo(seguidor, seguindo).isPresent()) {
 			throw new RuntimeException("Esse relacionamento já existe");
 
