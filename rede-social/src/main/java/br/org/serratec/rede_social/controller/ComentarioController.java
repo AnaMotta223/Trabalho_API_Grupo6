@@ -3,6 +3,7 @@ package br.org.serratec.rede_social.controller;
 import java.util.List;
 import java.util.Optional;
 
+import br.org.serratec.rede_social.repository.ComentarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,14 +35,14 @@ import jakarta.validation.Valid;
 @Tag(name = "Comentarios", description = "Operações relacionadas aos comentários")
 public class ComentarioController {
 
-	@Autowired
-	private ComentarioRepository comentarioRepository;
-
-	@Autowired
-	private ComentarioService comentarioService;
+    @Autowired
+    private ComentarioService comentarioService;
+    @Autowired
+    private ComentarioRepository comentarioRepository;
 
 	@Operation(summary = "Lista todos os comentarios", description = "A resposta lista os comentários feitos trazendo a hora e data de criação")
-	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Comentários listados com sucesso"),
+	@ApiResponses(value = { 
+			@ApiResponse(responseCode = "200", description = "Comentários listados com sucesso"),
 			@ApiResponse(responseCode = "204", description = "Conteúdo não localizado"),
 			@ApiResponse(responseCode = "400", description = "Requisição inválida"),
 			@ApiResponse(responseCode = "401", description = "Erro na autenticação"),
@@ -50,10 +51,14 @@ public class ComentarioController {
 			@ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
 			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") })
 
-	@GetMapping
-	public List<Comentario> listar() {
-		return comentarioService.listar();
+  
+	@GetMapping("/pagina")
+	public ResponseEntity<Page<Comentario>> listarPaginado(@PageableDefault(sort = "id",
+			direction = Sort.Direction.DESC, page = 0, size = 5) Pageable pageable){
+		Page<Comentario> comentarios = comentarioRepository.findAll(pageable);
+		return ResponseEntity.ok(comentarios);
 	}
+
 
 	@Operation(summary = "Buscar comnetários por ID", description = "A resposta traz os comentários realizados pelo ID selecionado")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Comentário encontrado"),
