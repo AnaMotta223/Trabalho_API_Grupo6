@@ -43,7 +43,7 @@ public class ComentarioController {
     @Autowired
     private ComentarioRepository comentarioRepository;
 
-	@Operation(summary = "Lista todos os comentarios", description = "A resposta lista os comentários feitos trazendo a hora e data de criação")
+	@Operation(summary = "Lista todos os comentarios por página", description = "A resposta lista os comentários feitos trazendo a hora e data de criação")
 	@ApiResponses(value = { 
 			@ApiResponse(responseCode = "200", description = "Comentários listados com sucesso"),
 			@ApiResponse(responseCode = "204", description = "Conteúdo não localizado"),
@@ -63,7 +63,7 @@ public class ComentarioController {
 	}
 
 
-	@Operation(summary = "Buscar comnetários por ID", description = "A resposta traz os comentários realizados pelo ID selecionado")
+	@Operation(summary = "Buscar comentários por ID", description = "A resposta traz os comentários realizados pelo ID selecionado")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Comentário encontrado"),
 			@ApiResponse(responseCode = "204", description = "Comentário não encontrado"),
 			@ApiResponse(responseCode = "400", description = "Requisição inválida"),
@@ -81,8 +81,27 @@ public class ComentarioController {
 		}
 		return ResponseEntity.notFound().build();
 	}
-
-	@Operation(summary = "Inserir um novo comentários", description = "A resposta cria um nov comentário, trazendo a hora e data de criação")
+    
+	@Operation(summary = "Buscar comentários por data", description = "A resposta traz os comentários realizados pela data selecionada")
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Comentário encontrado"),
+            @ApiResponse(responseCode = "204", description = "Comentário não encontrado"),
+            @ApiResponse(responseCode = "400", description = "Requisição inválida"),
+            @ApiResponse(responseCode = "401", description = "Erro na autenticação"),
+            @ApiResponse(responseCode = "403", description = "Operação proibida e não pode ser concluída"),
+            @ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
+            @ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
+            @ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") })
+	
+    @GetMapping("/por-data")
+    public ResponseEntity<List<Comentario>> buscarComentariosPorData(@RequestParam LocalDate dataCriacao) {
+        List<Comentario> comentarios = comentarioService.buscarComentariosPorData(dataCriacao);
+        if (comentarios.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(comentarios);
+    }  
+    
+    @Operation(summary = "Inserir um novo comentário", description = "A resposta cria um novo comentário, trazendo a hora e data de criação")
 
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "201", description = "Um ou mais comentários criados com sucesso"),
@@ -92,16 +111,6 @@ public class ComentarioController {
 			@ApiResponse(responseCode = "422", description = "Dados de requisição inválidos"),
 			@ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
 			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") })
-  
-    
-    @GetMapping("/por-data")
-    public ResponseEntity<List<Comentario>> buscarComentariosPorData(@RequestParam LocalDate dataCriacao) {
-        List<Comentario> comentarios = comentarioService.buscarComentariosPorData(dataCriacao);
-        if (comentarios.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(comentarios);
-    }  
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
@@ -130,10 +139,10 @@ public class ComentarioController {
 		return ResponseEntity.ok(comentarioAtualizado);
 	}
 
-	@Operation(summary = "Deletar um comnetário", description = "A resposta deleta um comnetário")
+	@Operation(summary = "Deletar um comentário", description = "A resposta deleta um Atualizar")
 
-	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Comnetário removido com sucesso"),
-			@ApiResponse(responseCode = "204", description = "Comnetário deletado"),
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Comentário removido com sucesso"),
+			@ApiResponse(responseCode = "204", description = "Comentário deletado"),
 			@ApiResponse(responseCode = "400", description = "Requisição inválida"),
 			@ApiResponse(responseCode = "401", description = "Erro na autenticação"),
 			@ApiResponse(responseCode = "403", description = "Operação proibida e não pode ser concluída"),
@@ -150,5 +159,3 @@ public class ComentarioController {
 	}
 	
 }
-
-

@@ -35,53 +35,40 @@ import jakarta.validation.Valid;
 @Tag(name = "Postagem", description = "Operações relacionadas as postagens")
 public class PostagemController {
 
-	
 	@Autowired
 	private PostagemService postagemService;
-    @Autowired
-    private PostagemRepository postagemRepository;
+	@Autowired
+	private PostagemRepository postagemRepository;
 
 	@Operation(summary = "Lista todas as postagens", description = "A resposta lista as postagens feitas trazendo a hora e data de criação")
-			
-	@ApiResponses(value = {
-			@ApiResponse(responseCode = "200", description = "Postagens listadas com sucesso"),
+
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Postagens listadas com sucesso"),
 			@ApiResponse(responseCode = "204", description = "Conteúdo não localizado"),
 			@ApiResponse(responseCode = "400", description = "Requisição inválida"),
 			@ApiResponse(responseCode = "401", description = "Erro na autenticação"),
 			@ApiResponse(responseCode = "403", description = "Operação proibida e não pode ser concluída"),
 			@ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
 			@ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
-			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") 
-		}
-	) 
+			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") })
 
-
-	@GetMapping("/pagina")
-	public ResponseEntity<Page<PostagemDTO>> listarPaginado(@PageableDefault(sort = "id",
-			direction = Sort.Direction.ASC, page = 0, size = 3) Pageable pageable) {
+	@GetMapping
+	public ResponseEntity<Page<PostagemDTO>> listarPaginado(
+			@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 3) Pageable pageable) {
 		Page<Postagem> postagens = postagemRepository.findAll(pageable);
-		List<PostagemDTO> postagemDTO = postagens.stream().map(PostagemDTO ::new).toList();
+		List<PostagemDTO> postagemDTO = postagens.stream().map(PostagemDTO::new).toList();
 		return ResponseEntity.ok(new PageImpl<>(postagemDTO, pageable, postagens.getTotalElements()));
 	}
-	
-	@GetMapping
-	public List<PostagemDTO> listar() {
-		return postagemService.listar();
-	}
-	
-	
-	 @Operation(summary = "Buscar postagem por ID", description = "A resposta traz as postagens realizadas pelo ID selecionado" )
-	    @ApiResponses(value = {
-	    		@ApiResponse(responseCode = "200", description = "Postagem encontrada"),
-				@ApiResponse(responseCode = "204", description = "Postagem não localizada"),
-				@ApiResponse(responseCode = "400", description = "Requisição inválida"),
-				@ApiResponse(responseCode = "401", description = "Erro na autenticação"),
-				@ApiResponse(responseCode = "403", description = "Operação proibida e não pode ser concluída"),
-				@ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
-				@ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
-				@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação")
-	    })
-	
+
+	@Operation(summary = "Buscar postagem por ID", description = "A resposta traz as postagens realizadas pelo ID selecionado")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Postagem encontrada"),
+			@ApiResponse(responseCode = "204", description = "Postagem não localizada"),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida"),
+			@ApiResponse(responseCode = "401", description = "Erro na autenticação"),
+			@ApiResponse(responseCode = "403", description = "Operação proibida e não pode ser concluída"),
+			@ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
+			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") })
+
 	@GetMapping("/{id}")
 	public ResponseEntity<PostagemDTO> buscar(@PathVariable Long id) {
 		Postagem postagem = postagemService.buscar(id);
@@ -90,77 +77,61 @@ public class PostagemController {
 		}
 		PostagemDTO postagemDTO = new PostagemDTO(postagem);
 		return ResponseEntity.ok(postagemDTO);
-	
-	}	
-	 
-	
-	 @Operation(summary = "Inserir uma nova postagem", description = "A resposta cria uma nova postagem, trazendo a hora e data de criação")
-		
-		@ApiResponses(value = {
-				@ApiResponse(responseCode = "201", description = "Uma ou mais postagens criadas com sucesso"),
-				@ApiResponse(responseCode = "400", description = "Requisição inválida"),
-				@ApiResponse(responseCode = "401", description = "Erro na autenticação"),
-				@ApiResponse(responseCode = "403", description = "Operação proibida e não pode ser concluída"),
-				@ApiResponse(responseCode = "422", description = "Dados de requisição inválidos"),
-				@ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
-				@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") 
-			}
-		) 
-		
-	 
+
+	}
+
+	@Operation(summary = "Inserir uma nova postagem", description = "A resposta cria uma nova postagem, trazendo a hora e data de criação")
+
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "201", description = "Uma ou mais postagens criadas com sucesso"),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida"),
+			@ApiResponse(responseCode = "401", description = "Erro na autenticação"),
+			@ApiResponse(responseCode = "403", description = "Operação proibida e não pode ser concluída"),
+			@ApiResponse(responseCode = "422", description = "Dados de requisição inválidos"),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
+			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") })
 	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)//retorna 201
+	@ResponseStatus(HttpStatus.CREATED) // retorna 201
 	public PostagemDTO inserir(@Valid @RequestBody Postagem postagem) {
 		postagem = postagemService.inserir(postagem);
 		return new PostagemDTO(postagem);
 	}
-	 
-	 
-	 @Operation(summary = "Alterar uma  postagem", description = "A resposta altera uma postagem")
-		
-		@ApiResponses(value = {
-				@ApiResponse(responseCode = "200", description = "Postagem alterada com sucesso"),
-				@ApiResponse(responseCode = "204", description = "Postagem não localizada"),
-				@ApiResponse(responseCode = "400", description = "Requisição inválida"),
-				@ApiResponse(responseCode = "401", description = "Erro na autenticação"),
-				@ApiResponse(responseCode = "403", description = "Operação proibida e não pode ser concluída"),
-				@ApiResponse(responseCode = "422", description = "Dados de requisição inválidos"),
-				@ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
-				@ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
-				@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") 
-			}
-		) 
-	 
-	
+
+	@Operation(summary = "Alterar uma  postagem", description = "A resposta altera uma postagem")
+
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Postagem alterada com sucesso"),
+			@ApiResponse(responseCode = "204", description = "Postagem não localizada"),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida"),
+			@ApiResponse(responseCode = "401", description = "Erro na autenticação"),
+			@ApiResponse(responseCode = "403", description = "Operação proibida e não pode ser concluída"),
+			@ApiResponse(responseCode = "422", description = "Dados de requisição inválidos"),
+			@ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
+			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") })
 	@PutMapping("/{id}")
 	public ResponseEntity<PostagemDTO> alterar(@PathVariable Long id, @Valid @RequestBody Postagem postagem) {
-	        if (postagemService.buscar(id) == null) {
-	            return ResponseEntity.notFound().build();
-	        }
-	        Postagem postagens = postagemService.alterar(id, postagem);
-	        
-	        return ResponseEntity.ok(new PostagemDTO(postagens));
-	    }
-	 
-	 
-	 @Operation(summary = "Deletar uma  postagem", description = "A resposta deleta uma postagem")
-		
-		@ApiResponses(value = {
-				@ApiResponse(responseCode = "200", description = "Postagem removida com sucesso"),
-				@ApiResponse(responseCode = "204", description = "Postagem deletada"),
-				@ApiResponse(responseCode = "400", description = "Requisição inválida"),
-				@ApiResponse(responseCode = "401", description = "Erro na autenticação"),
-				@ApiResponse(responseCode = "403", description = "Operação proibida e não pode ser concluída"),
-				@ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
-				@ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
-				@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") 
-			}
-		) 
-	 
-	 @DeleteMapping("/{id}")
-	    public ResponseEntity<Void> remover(@PathVariable Long id) {
-	        postagemService.remover(id);
-	        return ResponseEntity.noContent().build();
-	    }	 
-	
+		if (postagemService.buscar(id) == null) {
+			return ResponseEntity.notFound().build();
+		}
+		Postagem postagens = postagemService.alterar(id, postagem);
+
+		return ResponseEntity.ok(new PostagemDTO(postagens));
+	}
+
+	@Operation(summary = "Deletar uma  postagem", description = "A resposta deleta uma postagem")
+
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Postagem removida com sucesso"),
+			@ApiResponse(responseCode = "204", description = "Postagem deletada"),
+			@ApiResponse(responseCode = "400", description = "Requisição inválida"),
+			@ApiResponse(responseCode = "401", description = "Erro na autenticação"),
+			@ApiResponse(responseCode = "403", description = "Operação proibida e não pode ser concluída"),
+			@ApiResponse(responseCode = "404", description = "Recurso não encontrado"),
+			@ApiResponse(responseCode = "500", description = "Erro interno no servidor"),
+			@ApiResponse(responseCode = "505", description = "Exceção interna da aplicação") })
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> remover(@PathVariable Long id) {
+		postagemService.remover(id);
+		return ResponseEntity.noContent().build();
+	}
+
 }

@@ -12,7 +12,6 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,7 +23,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 
 @Configuration
-@EnableWebSecurity //serve para dizer que essa classe vai abilitar serviços de segurança.
+@EnableWebSecurity 
 public class ConfigSeguranca {
 
     @Autowired
@@ -32,8 +31,6 @@ public class ConfigSeguranca {
 
     @Autowired
     JwtUtil jwtUtil;
-
-
 
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -70,9 +67,6 @@ public class ConfigSeguranca {
         return http.build(); //metodo que captura todo request já feito e diz que precisa ser autenticado
     }
 
-
-
-
     @Bean
     CorsConfigurationSource corsConfigurationSource() { //configuração de quais dominios podem acessar nossa API
         CorsConfiguration corsConfiguration = new CorsConfiguration();
@@ -87,7 +81,7 @@ public class ConfigSeguranca {
 
     @Bean
     BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder(); //metodo para criptografar senha do usuario no bd
+        return new BCryptPasswordEncoder(); 
     }
 
 }

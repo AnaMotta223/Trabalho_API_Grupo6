@@ -20,7 +20,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import jakarta.validation.Valid;
 
 @Entity
 @Table(name = "postagem")
@@ -43,7 +42,6 @@ public class Postagem {
 	@Schema(description = "Data e hora de criação da postagem")
 	private LocalDateTime dataHoraCriacao;
 
-	@Valid
 	@ManyToOne
 	@JoinColumn(name = "id_usuario")
 	@Schema(description = "Autor da postagem")
