@@ -15,7 +15,6 @@ public class RelacionamentoDTO {
 	private String email;
 	
 	public RelacionamentoDTO(Long id, String nome, String email) {
-		super();
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
