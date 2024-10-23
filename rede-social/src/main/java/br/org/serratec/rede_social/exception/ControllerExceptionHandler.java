@@ -22,27 +22,24 @@ public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
 		List<String> erros = new ArrayList<>();
-		for (FieldError e: ex.getBindingResult().getFieldErrors()) { 
+		for (FieldError e : ex.getBindingResult().getFieldErrors()) {
 			erros.add(e.getField() + ": " + e.getDefaultMessage());
-			
+
 		}
-		
+
 		ErroResposta erroResposta = new ErroResposta(status.value(),
 				"Existem campos inválidos, confira o preenchimento", LocalDateTime.now(), erros);
 
-		return super.handleExceptionInternal(ex, erroResposta, headers, status, request); 
+		return super.handleExceptionInternal(ex, erroResposta, headers, status, request);
 	}
-	
-	
-	
-    @ExceptionHandler(EmailException.class)
-   private ResponseEntity<Object> handleEmailException( EmailException ex){
-       return ResponseEntity.unprocessableEntity().body(ex.getMessage());
-   }
 
-   @ExceptionHandler(SenhaException.class)
-    private ResponseEntity<Object> handleSenhaException( SenhaException ex){
-        return ResponseEntity.unprocessableEntity().body(ex.getMessage());
-   }
+	@ExceptionHandler(EmailException.class)
+	private ResponseEntity<Object> handleEmailException(EmailException ex) {
+		return ResponseEntity.unprocessableEntity().body(ex.getMessage());
+	}
+
+	@ExceptionHandler(SenhaException.class)
+	private ResponseEntity<Object> handleSenhaException(SenhaException ex) {
+		return ResponseEntity.unprocessableEntity().body(ex.getMessage());
+	}
 }
-
