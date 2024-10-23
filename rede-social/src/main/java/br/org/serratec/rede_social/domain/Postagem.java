@@ -18,6 +18,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import jakarta.validation.Valid;
 
 @Entity
@@ -29,7 +31,9 @@ public class Postagem {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Schema(description = "ID da postagem")
 	private Long id;
-	
+
+	@NotBlank(message = "Adicione o texto do conteúdo!")
+	@Size(max = 280, min = 2, message = "O tamanho da postagem deve ter entre {min} a {max} caractere.")
 	@Column(name = "conteudo", nullable = false, length = 280)
 	@Schema(description = "Conteúdo da postagem")
 	private String conteudo;

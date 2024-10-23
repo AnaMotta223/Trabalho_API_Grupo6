@@ -50,9 +50,7 @@ public class ConfigSeguranca {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()//permite todos - nao precisa logar
-                        .anyRequest().permitAll()
-                        
-                        //.anyRequest().authenticated()
+                        .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

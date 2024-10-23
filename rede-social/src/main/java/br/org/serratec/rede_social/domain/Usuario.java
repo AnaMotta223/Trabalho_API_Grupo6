@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import jakarta.validation.constraints.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -36,23 +37,32 @@ public class Usuario implements UserDetails, Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Schema(description = "ID do usuário")
 	private Long id;
-	
+
+	@NotBlank(message = "Preencha o nome do usuário!")
+	@Size(max = 50, min = 3, message = "O tamanho do nome deve ter entre {min} a {max} caractere.")
 	@Column(name = "nome", nullable = false, length = 50)
 	@Schema(description = "Nome do usuário")
 	private String nome;
-	
+
+	@NotBlank(message = "Preencha o sobrenome do Usuário!")
+	@Size(max = 100, min = 2, message = "O tamanho do sobrenome deve ter entre {min} a {max} caractere.")
 	@Column(name = "sobrenome", nullable = false, length = 100)
 	@Schema(description = "Sobrenome do usuário")
 	private String sobrenome;
-	
+
+	@NotBlank(message = "Preencha o email!")
+	@Email(regexp = "[a-z0-9.-]+@[a-z.]+\\.[a-z]{2,3}", flags = Pattern.Flag.CASE_INSENSITIVE, message = "Insira um email válido")
 	@Column(name = "email", nullable = false, unique = true, length = 50)
 	@Schema(description = "Email do usuário")
 	private String email;
-	
+
+	@NotNull(message = "Preencha a senha!")
+	@Size(max = 128, min = 6, message = "O tamanho da senha deve ter entre {min} e {min} caractere. ")
 	@Column(name = "senha", nullable = false, length = 128)
 	@Schema(description = "Senha do usuário")
 	private String senha;
-	
+
+	@NotNull(message = "Preencha a data de nascimento!")
 	@Column(name = "data_nascimento", nullable = false)
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	@Schema(description = "Data de nascimento do usuário")
