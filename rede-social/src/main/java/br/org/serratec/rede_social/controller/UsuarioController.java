@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -147,6 +149,14 @@ public class UsuarioController {
 		return ResponseEntity.noContent().build();
 	}
 	
+	@GetMapping("/pagina")
+	public ResponseEntity<Page<UsuarioDTO>> listarPaginado(
+			@PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0,size = 5)Pageable pageable) {
+		Page<Usuario> usuarios = usuarioRepository.findAll(pageable);
+		List<UsuarioDTO> usuariosDTO = usuarios.stream().map(UsuarioDTO :: new).toList();
+		return ResponseEntity.ok(new PageImpl<>(usuariosDTO, pageable, usuarios.getTotalElements()));
+		
+	}
 	
 	
 	@GetMapping("/buscarPostagem")
